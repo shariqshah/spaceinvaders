@@ -17,6 +17,8 @@ MissileComponent::MissileComponent(Game* game, Entity* entity, float speed) : Co
 
 MissileComponent::~MissileComponent()
 {
+	UnsubscribeFromEvent(EventType::Update, this);
+	UnsubscribeFromEvent(EventType::Collision, this);
 }
 
 void MissileComponent::HandleCollision(Object * sender, const EventDataMap & eventData)

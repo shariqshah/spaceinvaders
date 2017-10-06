@@ -19,6 +19,8 @@ BombComponent::BombComponent(Game* game, Entity* entity, float speed) : Componen
 
 BombComponent::~BombComponent()
 {
+	UnsubscribeFromEvent(EventType::Update, this);
+	UnsubscribeFromEvent(EventType::Collision, this);
 }
 
 void BombComponent::HandleUpdate(Object * sender, const EventDataMap& eventData)

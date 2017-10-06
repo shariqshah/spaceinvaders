@@ -7,7 +7,7 @@ class BombComponent : public Component
 public:
 	BombComponent() {};
 	BombComponent(Game* game, Entity* entity, float speed);
-	~BombComponent();
+	virtual ~BombComponent();
 
 	virtual ComponentType GetType() override { return ComponentType::Bomb; }
 

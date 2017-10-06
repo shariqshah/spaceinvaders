@@ -9,7 +9,7 @@ class DroneComponent : public Component
 public:
 	DroneComponent() {};
 	DroneComponent(Game* game, Entity* entity);
-	~DroneComponent();
+	virtual ~DroneComponent();
 
 	virtual ComponentType GetType() override { return ComponentType::Drone; }
 

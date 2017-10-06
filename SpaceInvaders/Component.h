@@ -21,7 +21,7 @@ class Component : public Object
 public:
 	Component() : entity(NULL) {};
 	Component(Game* game, Entity* entity);
-	~Component();
+	virtual ~Component();
 
 	virtual ComponentType GetType() = 0;
 	Entity* GetEntity() { return entity; }

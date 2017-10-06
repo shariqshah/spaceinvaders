@@ -7,7 +7,7 @@ class MissileComponent : public Component
 public:
 	MissileComponent() {};
 	MissileComponent(Game* game, Entity* entity, float speed);
-	~MissileComponent();
+	virtual ~MissileComponent();
 
 	virtual ComponentType GetType() override { return ComponentType::Missile; }
 

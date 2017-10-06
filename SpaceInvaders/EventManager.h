@@ -36,7 +36,7 @@ public:
 	~EventManager();
 
 	void SubscribeEvent(EventType type, Object* subscriber, EventHandler onEvent);
-	bool UnSubscribeEvent(EventType type, Object* subscriber);
+	bool UnsubscribeEvent(EventType type, Object* subscriber);
 	void SendEvent(EventType type, Object* sender, const EventDataMap& data);
 	void SendEvent(EventType type, Object* sender, Object* reciever, const EventDataMap& data);
 	void SendEvent(EventType type, Object* sender, Entity* reciever, const EventDataMap& data);

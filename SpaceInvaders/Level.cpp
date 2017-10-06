@@ -19,6 +19,7 @@ Level::Level(Game* game)
 
 Level::~Level()
 {
+	UnsubscribeFromEvent(EventType::PostUpdate, this);
 	for(auto entityEntry : entities)
 	{
 		Entity* entity = entityEntry.second;
@@ -109,7 +110,7 @@ void Level::Initialize()
 	AddEntity(player);
 
 	// Add Drones
-	int numDrones = 20;
+	int numDrones = 1;
 	sf::Texture* droneTexture = game->GetResourceManager()->GetTexture("Textures/drone.png");
 	for(int i = 0; i < numDrones; i++)
 	{
@@ -138,11 +139,15 @@ void Level::HandlePostUpdate(Object * sender, const EventDataMap & eventData)
 	//Remove all entities marked for deletion
 	for(Entity* entity : markedEntites)
 	{
+		if(!entity) 
+			continue;
+
 		string entityName = entity->GetName();
 		auto iter = entities.find(entityName);
 		if(iter != entities.end())
 		{
 			entities.erase(iter);
+			delete entity;
 			entity = NULL;
 			Log::Message("Removed entity '%s' from level", entityName.c_str());
 		}

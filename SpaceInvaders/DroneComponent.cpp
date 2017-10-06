@@ -24,6 +24,8 @@ DroneComponent::DroneComponent(Game* game, Entity* entity) : Component(game, ent
 
 DroneComponent::~DroneComponent()
 {
+	UnsubscribeFromEvent(EventType::Update, this);
+	UnsubscribeFromEvent(EventType::LevelStart, this);
 }
 
 void DroneComponent::HandleUpdate(Object * sender, const map<string, Variant>& eventData)

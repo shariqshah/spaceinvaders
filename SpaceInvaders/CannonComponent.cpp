@@ -18,6 +18,7 @@ CannonComponent::CannonComponent(Game * game, Entity * entity, float speed) : Co
 
 CannonComponent::~CannonComponent()
 {
+	UnsubscribeFromEvent(EventType::KeyDown, this);
 }
 
 void CannonComponent::HandleKeyDown(Object * sender, const EventDataMap& eventData)
@@ -34,7 +35,8 @@ void CannonComponent::HandleKeyDown(Object * sender, const EventDataMap& eventDa
 	{
 		move -= (moveSpeed * game->GetDeltaTime());
 	}
-	else if(key == Keyboard::Space)
+	
+	if(key == Keyboard::Space)
 	{
 		Entity* missile = new Entity(game, "Missile" + to_string(clock.getElapsedTime().asMilliseconds()));
 		missile->AddComponent(new MissileComponent(game, missile, -200.f));

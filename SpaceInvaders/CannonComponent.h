@@ -11,7 +11,7 @@ class CannonComponent :	public Component
 public:
 	CannonComponent() {};
 	CannonComponent(Game* game, Entity* entity, float speed);
-	~CannonComponent();
+	virtual ~CannonComponent();
 
 	virtual ComponentType GetType() override { return ComponentType::Cannon; }
 

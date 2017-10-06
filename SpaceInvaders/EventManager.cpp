@@ -17,7 +17,7 @@ void EventManager::SubscribeEvent(EventType type, Object * subscriber, EventHand
 	subscriptions.push_back(EventSubscription(type, subscriber, onEvent));
 }
 
-bool EventManager::UnSubscribeEvent(EventType type, Object * subscriber)
+bool EventManager::UnsubscribeEvent(EventType type, Object * subscriber)
 {
 	int index = -1;
 	for(int i = 0; i < subscriptions.size(); i++)
@@ -53,22 +53,17 @@ void EventManager::SendEvent(EventType type, Object * sender, Object * reciever,
 		if(subscription.type == type && subscription.subscriber == reciever)
 		{
 			subscription.onEvent(sender, data);
+			break;
 		}
 	}
 }
 
 void EventManager::SendEvent(EventType type, Object * sender, Entity * reciever, const EventDataMap& data)
 {
-	for(EventSubscription& subscription : subscriptions)
+	auto components = reciever->GetComponents();
+	for(Component* component : components)
 	{
-		if(subscription.type == type)
-		{
-			auto components = reciever->GetComponents();
-			for(Component* component : components)
-			{
-				SendEvent(type, sender, component, data);
-			}
-		}
+		SendEvent(type, sender, component, data);
 	}
 }
 
