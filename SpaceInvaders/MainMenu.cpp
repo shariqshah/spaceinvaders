@@ -60,6 +60,7 @@ MainMenu::MainMenu(Game* game)
 
 MainMenu::~MainMenu()
 {
+	UnsubscribeFromEvent(EventType::KeyDown, this);
 }
 
 void MainMenu::Update(float deltaTime)

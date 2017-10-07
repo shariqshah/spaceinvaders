@@ -13,15 +13,23 @@ namespace sf
 	class RenderWindow;
 }
 
+#define MAX_PLAYER_LIVES 3
+
 class Game : public Object
 {
 public:
+	struct PlayerState
+	{
+		int score = 0;
+		int lives = MAX_PLAYER_LIVES;
+	};
+
 	enum class State
 	{
 		MainMenu = 0,
 		Level,
 		Options,
-		EndGame,
+		GameOver,
 		HighScore,
 		Quit,
 		Len
@@ -36,11 +44,12 @@ public:
 	EventManager* GetEventManager() { return eventManager; }
 	void SetCurrentState(State newState);
 	State GetCurrentState() const { return currentState; } 
-	bool IsLevelStarted() const { return isLevelStarted; }
+	bool IsLevelStarted() const { return levelStarted; }
 	float GetDeltaTime() { return deltaTime; }
 	int GetWindowWidth();
 	int GetWindowHeight();
 	Level* GetLevel();
+	PlayerState* GetPlayerState() { return &playerState; };
 
 private:
 	std::vector<GameState*> gameStates;
@@ -49,7 +58,11 @@ private:
 	EventManager* eventManager;
 
 	State currentState;
-	bool isLevelStarted = false;
+	State requestedState;
+	bool levelStarted = false;
+	PlayerState playerState;
 	float deltaTime = 0.16f;
+
+	void SetRequestedState();
 };
 

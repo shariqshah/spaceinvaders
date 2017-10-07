@@ -19,11 +19,15 @@ typedef std::function<void(Object* sender, const EventDataMap& data)> EventHandl
 struct EventSubscription
 {
 	EventType    type;
-	Object*      subscriber;
+	Object*      subscriber = NULL;
 	EventHandler onEvent;
 
 	EventSubscription(EventType eventType, Object* eventSubscriber, EventHandler handler)
 		: type(eventType), subscriber(eventSubscriber), onEvent(handler)
+	{}
+
+	EventSubscription(const EventSubscription& other)
+		: type(other.type), subscriber(other.subscriber), onEvent(other.onEvent)
 	{}
 };
 
@@ -38,6 +42,7 @@ public:
 	void SubscribeEvent(EventType type, Object* subscriber, EventHandler onEvent);
 	bool UnsubscribeEvent(EventType type, Object* subscriber);
 	void SendEvent(EventType type, Object* sender, const EventDataMap& data);
+	void SendEvent(EventType type);
 	void SendEvent(EventType type, Object* sender, Object* reciever, const EventDataMap& data);
 	void SendEvent(EventType type, Object* sender, Entity* reciever, const EventDataMap& data);
 	bool IsSubscribed(EventType type, Object* object);

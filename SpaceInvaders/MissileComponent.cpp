@@ -27,6 +27,13 @@ void MissileComponent::HandleCollision(Object * sender, const EventDataMap & eve
 	if(other->HasComponent(ComponentType::Drone) || other->HasComponent(ComponentType::Bomb))
 	{
 		Level* level = game->GetLevel();
+		if(other->HasComponent(ComponentType::Drone))
+		{
+			// We just hit a drone, broadcast the message
+			EventManager* eventManager = game->GetEventManager();
+			eventManager->SendEvent(EventType::DroneDestroyed);
+		}
+
 		level->RemoveEntity(entity);
 		level->RemoveEntity(other);
 	}

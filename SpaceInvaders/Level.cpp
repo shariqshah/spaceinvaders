@@ -13,13 +13,20 @@ using namespace std;
 Level::Level(Game* game)
 {
 	this->game = game;
+	sf::Font* font = game->GetResourceManager()->GetFont("Fonts/ARCADE.ttf");
+	scoreText.setFont(*font);
+	scoreText.setString("Score : 0");
+	scoreText.setPosition((game->GetWindowWidth() / 2) - (scoreText.getLocalBounds().width / 2.f), 10.f);
 
 	SubscribeToEvent(EventType::PostUpdate, this, &Level::HandlePostUpdate);
+	SubscribeToEvent(EventType::DroneDestroyed, this, &Level::HandleDroneDestroyed);
 }
 
 Level::~Level()
 {
 	UnsubscribeFromEvent(EventType::PostUpdate, this);
+	UnsubscribeFromEvent(EventType::DroneDestroyed, this);
+
 	for(auto entityEntry : entities)
 	{
 		Entity* entity = entityEntry.second;
@@ -45,7 +52,10 @@ void Level::Update(float deltaTime)
 			Entity* other = otherEntityEntry.second;
 			if(entity == other) // No point in checking collisions with self, carry on
 				continue;
-
+			
+			if(other->IsMarkedForDeletion()) // This entity is marked for deletion and won't exist in the next frame. 
+				continue;                    // For all intents and purposes this entity does not exist so no point in checking for collisions against it
+				
 			if(other->GetSprite()->getGlobalBounds().intersects(entity->GetSprite()->getGlobalBounds()))
 			{
 				// We have a collision, inform both entities that they are colliding and let them handle 
@@ -65,6 +75,8 @@ void Level::Draw()
 {
 	sf::RenderWindow* window = game->GetWindow();
 	window->clear(sf::Color::Black);
+
+	window->draw(scoreText);
 
 	for(auto entityEntry : entities)
 	{
@@ -108,11 +120,12 @@ void Level::Initialize()
 	playerSprite->setTexture(*texture);
 	player->SetPosition(game->GetWindowWidth() / 2, game->GetWindowHeight() - 100);
 	AddEntity(player);
+	SetPlayer(player);
 
 	// Add Drones
-	int numDrones = 1;
 	sf::Texture* droneTexture = game->GetResourceManager()->GetTexture("Textures/drone.png");
-	for(int i = 0; i < numDrones; i++)
+	dronesLeft = 0;
+	for(int i = 0; i < numDronesToSpawn; i++)
 	{
 		Entity* drone = new Entity(game, "Drone" + to_string(i + 1));
 		drone->AddComponent(new DroneComponent(game, drone));
@@ -120,6 +133,7 @@ void Level::Initialize()
 		droneSprite->setTexture(*droneTexture);
 		drone->SetPosition(droneTexture->getSize().x * i, 300.f);
 		AddEntity(drone);
+		dronesLeft++;
 	}
 
 	//Add Ground
@@ -163,5 +177,19 @@ void Level::HandlePostUpdate(Object * sender, const EventDataMap & eventData)
 	{
 		Entity* entity = entityEntry.second;
 		entity->SetCheckedForCollisions(false);
+	}
+}
+
+void Level::HandleDroneDestroyed(Object * sender, const EventDataMap & eventData)
+{
+	game->GetPlayerState()->score += 10;
+	scoreText.setString("Score : " + to_string(game->GetPlayerState()->score));
+	scoreText.setPosition((game->GetWindowWidth() / 2) - (scoreText.getLocalBounds().width / 2.f), 10.f);
+	dronesLeft--;
+
+	if(dronesLeft == 0)
+	{
+		// Level cleared, player won
+		game->SetCurrentState(Game::State::GameOver);
 	}
 }

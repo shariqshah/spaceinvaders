@@ -19,9 +19,12 @@ class Game;
 class Object
 {
 public:
-	Object();
+	Object() : game(NULL) {};
+	Object(Game* gameInstance);
 	~Object();
+	Object(const Object& other) : game(other.GetGame()){}
 
+	Game* GetGame() const { return game; };
 protected:
 	Game* game = NULL;
 };

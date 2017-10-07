@@ -1,6 +1,7 @@
 #include "EventManager.h"
 #include "Entity.h"
 #include "Component.h"
+#include "Log.h"
 
 using  namespace std;
 
@@ -37,11 +38,36 @@ bool EventManager::UnsubscribeEvent(EventType type, Object * subscriber)
 
 void EventManager::SendEvent(EventType type, Object * sender, const EventDataMap& data)
 {
+	// for(EventSubscription& subscription : subscriptions)
+	for(int i = 0; i < subscriptions.size(); i++)
+	{
+		EventSubscription& subscription = subscriptions[i];
+		if(subscription.type == type)
+		{
+			if(!subscription.subscriber)
+			{
+				Log::Error("EventManager:SendEvent", "No subscriber registered");
+				continue;
+			}
+			else if(!subscription.onEvent)
+			{
+				Log::Error("EventManager:SendEvent", "No event handler registered for subsciption");
+				continue;
+			}
+
+			subscription.onEvent(sender, data);
+		}
+	}
+}
+
+void EventManager::SendEvent(EventType type)
+{
 	for(EventSubscription& subscription : subscriptions)
 	{
 		if(subscription.type == type)
 		{
-			subscription.onEvent(sender, data);
+			subscription.onEvent(NULL, eventData);
+			break;
 		}
 	}
 }

@@ -12,7 +12,7 @@ class MainMenu : public GameState
 public:
 	MainMenu() {}
 	MainMenu(Game* game);
-	~MainMenu();
+	virtual ~MainMenu();
 
 	virtual void Update(float deltaTime) override;
 	virtual void Draw() override;

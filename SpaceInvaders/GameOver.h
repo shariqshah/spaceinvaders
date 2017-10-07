@@ -4,18 +4,19 @@
 
 #include <SFML\Graphics.hpp>
 
-class HighScore : public GameState
+class GameOver : public GameState
 {
 public:
-	HighScore() {};
-	HighScore(Game* game);
-	virtual ~HighScore();
+	GameOver() {};
+	GameOver(Game* game);
+	virtual ~GameOver();
 
 	virtual void Update(float deltaTime) override;
 	virtual void Draw() override;
 
 private:
-	sf::Text titleText;
+	sf::Text messageText;
+	sf::Text scoreText;
 	sf::Text instructionText;
 
 	void HandleKeyDown(Object* sender, const EventDataMap& eventData);

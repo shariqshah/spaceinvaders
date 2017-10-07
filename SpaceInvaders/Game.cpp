@@ -4,6 +4,7 @@
 #include "Options.h"
 #include "HighScore.h"
 #include "Level.h"
+#include "GameOver.h"
 #include "ResourceManager.h"
 #include "EventManager.h"
 #include "Events.h"
@@ -30,9 +31,11 @@ Game::Game()
 	// Create all game states
 	gameStates.resize((int)State::Len);
 	gameStates[(int)State::MainMenu]  = new MainMenu(this);
-	gameStates[(int)State::Options]   = new Options(this);
+	/*gameStates[(int)State::Options]   = new Options(this);
 	gameStates[(int)State::HighScore] = new HighScore(this);
+	gameStates[(int)State::GameOver]  = new GameOver(this);*/
 	currentState = State::MainMenu;
+	requestedState = currentState;
 
 	//Seed the random number generator
 	srand(time(NULL));
@@ -69,6 +72,7 @@ void Game::Run()
 
 				eventData.insert(pair<string, Variant>("Key", Variant((int)event.key.code)));
 				eventData.insert(pair<string, Variant>("Control", Variant(event.key.control)));
+				eventData.insert(pair<string, Variant>("Shift", Variant(event.key.shift)));
 				eventManager->SendEvent(EventType::KeyDown, this, eventData);
 
 				if(event.key.code == sf::Keyboard::Escape)
@@ -106,8 +110,65 @@ void Game::Run()
 		window->display();
 
 		eventManager->ResetEventDataMap();
+
+		if(currentState != requestedState)
+		{
+			SetRequestedState();
+		}
 	}
 }
+
+void Game::SetRequestedState()
+{
+	if(requestedState == currentState)
+		return;
+
+	switch(requestedState)
+	{
+	case State::Level:
+	{
+		gameStates[(int)State::Level] = new Level(this);
+		Level* level = static_cast<Level*>(gameStates[(int)State::Level]);
+		level->Initialize();
+		levelStarted = true;
+		// Send a Level started event
+		eventManager->SendEvent(EventType::LevelStart);
+	}
+	break;
+	case State::HighScore:
+	{
+		levelStarted = false;
+		gameStates[(int)Game::State::HighScore] = new HighScore(this);
+	}
+	break;
+	case State::GameOver:
+	{
+		gameStates[(int)Game::State::GameOver] = new GameOver(this);
+		levelStarted = false;
+	}
+	break;
+	case State::MainMenu:
+	{
+		gameStates[(int)Game::State::MainMenu] = new MainMenu(this);
+	}
+	break;
+	};
+
+	currentState = requestedState;
+
+	for(int i = 0; i < gameStates.size(); i++)
+	{
+		if(i == (int)currentState)
+			continue;
+
+		if(gameStates[i])
+		{
+			delete gameStates[i];
+			gameStates[i] = NULL;
+		}
+	}
+}
+
 
 void Game::SetCurrentState(State newState)
 {
@@ -116,25 +177,13 @@ void Game::SetCurrentState(State newState)
 		window->close();
 		return;
 	}
-	else if(newState == State::Level)
-	{
-		if(!isLevelStarted) 
-		{
-			gameStates[(int)State::Level] = new Level(this);
-			Level* level = static_cast<Level*>(gameStates[(int)State::Level]);
-			level->Initialize();
-			isLevelStarted = true;
-			// Send a Level started event
-			eventManager->SendEvent(EventType::LevelStart, this, eventManager->GetEventDataMap());
-		}
-	}
-	else if(newState == State::Len)
-	{
-		Log::Error("Game:SetCurrentState", "Invalid Game State 'Len'");
-		return;
-	}
 
-	currentState = newState;
+	//if(gameStates[(int)currentState])
+	//{
+	//	delete gameStates[(int)currentState];
+	//	gameStates[(int)currentState] = NULL;
+	//}
+	requestedState = newState;
 }
 
 int Game::GetWindowWidth()

@@ -18,7 +18,7 @@ private:
 	void HandleLevelStart(Object* sender, const std::map<std::string, Variant>& eventData);
 
 	sf::Clock clock;
-	const int shootIntervalMax = 10; // maximum number of seconds after which drone drops a bomb
+	const int shootIntervalMax = 20; // maximum number of seconds after which drone drops a bomb
 	int shootInterval = 0;
 	float prevTime;
 };

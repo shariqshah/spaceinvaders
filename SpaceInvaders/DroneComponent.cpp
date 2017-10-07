@@ -33,9 +33,9 @@ void DroneComponent::HandleUpdate(Object * sender, const map<string, Variant>& e
 	float currentTime = clock.getElapsedTime().asSeconds();
 	int timeElapsed = (int)(currentTime - prevTime);
 	
-	if(timeElapsed >= shootInterval)
+	if(currentTime >= shootInterval)
 	{
-		Entity* bomb = new Entity(game, "Bomb" + to_string(clock.getElapsedTime().asMilliseconds()));
+		Entity* bomb = new Entity(game, "Bomb" + to_string(clock.getElapsedTime().asMicroseconds()));
 		bomb->AddComponent(new BombComponent(game, bomb, 60.f));
 
 		sf::Sprite* bombSprite = bomb->GetSprite();
@@ -52,6 +52,7 @@ void DroneComponent::HandleUpdate(Object * sender, const map<string, Variant>& e
 		level->AddEntity(bomb);
 		
 		prevTime = currentTime;
+		clock.restart();
 	}
 }
 

@@ -9,7 +9,7 @@ class GameState : public Object
 public:
 	GameState() {}
 	GameState(Game* game);
-	~GameState();
+	virtual ~GameState();
 
 	virtual void Update(float deltaTime) = 0;
 	virtual void Draw() = 0;
