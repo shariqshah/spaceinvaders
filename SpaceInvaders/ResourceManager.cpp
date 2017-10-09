@@ -2,6 +2,7 @@
 #include "Log.h"
 
 #include <SFML\Graphics.hpp>
+#include <SFML\Audio.hpp>
 
 ResourceManager::ResourceManager()
 {
@@ -10,6 +11,33 @@ ResourceManager::ResourceManager()
 
 ResourceManager::~ResourceManager()
 {
+	for(auto fontEntry : fonts)
+	{
+		sf::Font* font = fontEntry.second;
+		if(font)
+			delete font;
+	}
+
+	for(auto textureEntry : textures)
+	{
+		sf::Texture* texture = textureEntry.second;
+		if(texture)
+			delete texture;
+	}
+
+	for(auto soundBufferEntry : soundBuffers)
+	{
+		sf::SoundBuffer* soundBuffer = soundBufferEntry.second;
+		if(soundBuffer)
+			delete soundBuffer;
+	}
+
+	for(auto musicFileEntry : music)
+	{
+		sf::Music* music = musicFileEntry.second;
+		if(music)
+			delete music;
+	}
 }
 
 sf::Font* ResourceManager::GetFont(const std::string & name)
@@ -58,4 +86,52 @@ sf::Texture * ResourceManager::GetTexture(const std::string & name)
 	}
 
 	return texture;
+}
+
+sf::SoundBuffer * ResourceManager::GetSoundBuffer(const std::string & name)
+{
+	sf::SoundBuffer* soundBuffer = NULL;
+	auto it = soundBuffers.find(name);
+	if(it != soundBuffers.end())
+	{
+		soundBuffer = it->second;
+	}
+	else
+	{
+		soundBuffer = new sf::SoundBuffer();
+		if(!soundBuffer->loadFromFile(dataDirectory + name))
+		{
+			Log::Error("ResourceManager:GetSoundBuffer", "Failed to load sound buffer %s", name.c_str());
+			delete soundBuffer;
+			return NULL;
+		}
+		soundBuffers[name] = soundBuffer;
+		Log::Message("Created sound buffer from %s", name.c_str());
+	}
+
+	return soundBuffer;
+}
+
+sf::Music * ResourceManager::GetMusic(const std::string & name)
+{
+	sf::Music* musicFile = NULL;
+	auto it = music.find(name);
+	if(it != music.end())
+	{
+		musicFile = it->second;
+	}
+	else
+	{
+		musicFile = new sf::Music();
+		if(!musicFile->openFromFile(dataDirectory + name))
+		{
+			Log::Error("ResourceManager:GetMusic", "Failed to load music file %s", name.c_str());
+			delete musicFile;
+			return NULL;
+		}
+		music[name] = musicFile;
+		Log::Message("Loaded music file from %s", name.c_str());
+	}
+
+	return musicFile;
 }

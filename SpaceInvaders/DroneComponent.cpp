@@ -1,6 +1,7 @@
 #include "DroneComponent.h"
 #include "Entity.h"
 #include "BombComponent.h"
+#include "SoundComponent.h"
 #include "EventManager.h"
 #include "Level.h"
 #include "ResourceManager.h"
@@ -18,6 +19,7 @@ DroneComponent::DroneComponent(Game* game, Entity* entity) : Component(game, ent
 	// Register to relevant events
 	SubscribeToEvent(EventType::Update, this, &DroneComponent::HandleUpdate);
 	SubscribeToEvent(EventType::LevelStart, this, &DroneComponent::HandleLevelStart);
+	SubscribeToEvent(EventType::Collision, this, &DroneComponent::HandleCollision);
 
 	shootInterval = (rand() % shootIntervalMax) + 6;
 }
@@ -53,10 +55,29 @@ void DroneComponent::HandleUpdate(Object * sender, const map<string, Variant>& e
 		
 		prevTime = currentTime;
 		clock.restart();
+
+		SoundComponent* soundComponent = entity->GetComponent<SoundComponent>();
+		if(soundComponent)
+		{
+			soundComponent->Play("Sounds/DroneShoot.wav");
+		}
 	}
 }
 
 void DroneComponent::HandleLevelStart(Object * sender, const map<string, Variant>& eventData)
 {
 	prevTime = clock.getElapsedTime().asSeconds();
+}
+
+void DroneComponent::HandleCollision(Object * sender, const std::map<std::string, Variant>& eventData)
+{
+	Entity* other = (Entity*)eventData.at("Other").GetVoidPtr();
+	if(other->HasComponent(ComponentType::Missile))
+	{
+		SoundComponent* soundComponent = entity->GetComponent<SoundComponent>();
+		if(soundComponent)
+		{
+			soundComponent->Play("Sounds/DroneHit.wav");
+		}
+	}
 }

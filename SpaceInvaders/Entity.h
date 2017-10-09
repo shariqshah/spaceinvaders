@@ -19,7 +19,7 @@ public:
 	std::string GetName() { return name; };
 	sf::Sprite* GetSprite() { return &sprite; }
 	void SetName(const std::string& entityName) { name = entityName; }
-	void AddComponent(Component* component);
+	Component* AddComponent(Component* component);
 	bool HasComponent(ComponentType type);
 	bool RemoveComponent(ComponentType type);
 	std::vector<Component*>& GetComponents() { return components; };

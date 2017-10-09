@@ -3,6 +3,7 @@
 #include "Game.h"
 #include "CannonComponent.h"
 #include "DroneComponent.h"
+#include "SoundComponent.h"
 #include "ResourceManager.h"
 #include "Log.h"
 
@@ -14,9 +15,16 @@ Level::Level(Game* game)
 {
 	this->game = game;
 	sf::Font* font = game->GetResourceManager()->GetFont("Fonts/ARCADE.ttf");
-	scoreText.setFont(*font);
-	scoreText.setString("Score : 0");
-	scoreText.setPosition((game->GetWindowWidth() / 2) - (scoreText.getLocalBounds().width / 2.f), 10.f);
+	if(font)
+	{
+		scoreText.setFont(*font);
+		scoreText.setString("Score : 0");
+		scoreText.setPosition((game->GetWindowWidth() / 2) - (scoreText.getLocalBounds().width / 2.f), 10.f);
+
+		livesText.setFont(*font);
+		livesText.setString("Lives : " + to_string(game->GetPlayerState()->lives));
+		livesText.setPosition(30.f, 10.f);
+	}
 
 	SubscribeToEvent(EventType::PostUpdate, this, &Level::HandlePostUpdate);
 	SubscribeToEvent(EventType::DroneDestroyed, this, &Level::HandleDroneDestroyed);
@@ -53,8 +61,9 @@ void Level::Update(float deltaTime)
 			if(entity == other) // No point in checking collisions with self, carry on
 				continue;
 			
-			if(other->IsMarkedForDeletion()) // This entity is marked for deletion and won't exist in the next frame. 
-				continue;                    // For all intents and purposes this entity does not exist so no point in checking for collisions against it
+			//if(other->IsMarkedForDeletion()) // This entity is marked for deletion and won't exist in the next frame. 
+			//	continue;                    // For all intents and purposes this entity does not exist so no point in checking for collisions against it
+			// So this turned out to be a bad idea :p
 				
 			if(other->GetSprite()->getGlobalBounds().intersects(entity->GetSprite()->getGlobalBounds()))
 			{
@@ -77,6 +86,7 @@ void Level::Draw()
 	window->clear(sf::Color::Black);
 
 	window->draw(scoreText);
+	window->draw(livesText);
 
 	for(auto entityEntry : entities)
 	{
@@ -118,7 +128,12 @@ void Level::Initialize()
 	sf::Texture* texture = game->GetResourceManager()->GetTexture("Textures/cannon.png");
 	sf::Sprite* playerSprite = player->GetSprite();
 	playerSprite->setTexture(*texture);
-	player->SetPosition(game->GetWindowWidth() / 2, game->GetWindowHeight() - 100);
+	player->SetPosition(game->GetWindowWidth() / 2, game->GetWindowHeight() - 200);
+
+	SoundComponent* soundComponent = (SoundComponent*)player->AddComponent(new SoundComponent(game, player));
+	soundComponent->AddSound("Sounds/CannonShoot.wav");
+	soundComponent->AddSound("Sounds/CannonHit.wav");
+
 	AddEntity(player);
 	SetPlayer(player);
 
@@ -132,6 +147,11 @@ void Level::Initialize()
 		sf::Sprite* droneSprite = drone->GetSprite();
 		droneSprite->setTexture(*droneTexture);
 		drone->SetPosition(droneTexture->getSize().x * i, 300.f);
+
+		SoundComponent* droneSoundComponent = (SoundComponent*)drone->AddComponent(new SoundComponent(game, drone));
+		droneSoundComponent->AddSound("Sounds/DroneShoot.wav");
+		droneSoundComponent->AddSound("Sounds/DroneHit.wav");
+
 		AddEntity(drone);
 		dronesLeft++;
 	}
@@ -146,6 +166,11 @@ void Level::Initialize()
 	groundTexture->setRepeated(true);
 	groundSprite->setTextureRect(sf::IntRect(0, 0, window->getSize().x, 64));
 	AddEntity(ground);
+}
+
+void Level::UpdateLivesText()
+{
+	livesText.setString("Lives : " + to_string(game->GetPlayerState()->lives));
 }
 
 void Level::HandlePostUpdate(Object * sender, const EventDataMap & eventData)

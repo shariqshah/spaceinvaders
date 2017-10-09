@@ -22,11 +22,13 @@ public:
 	void AddEntity(Entity* entity);
 	void RemoveEntity(Entity* entity);
 	void Initialize();
+	void UpdateLivesText();
 	void SetPlayer(Entity* entity) { playerEntity = entity; };
 	Entity* GetPlayer() { return playerEntity; };
 
 private:
 	sf::Text scoreText;
+	sf::Text livesText;
 	std::map<std::string, Entity*> entities;
 	std::vector<Entity*> markedEntites;
 	Entity* playerEntity = NULL;

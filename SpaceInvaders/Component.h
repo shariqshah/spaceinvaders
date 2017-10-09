@@ -13,6 +13,8 @@ enum class ComponentType
 	Missile,
 	Drone,
 	Ground,
+	Sound,
+	Music,
 	Len
 };
 

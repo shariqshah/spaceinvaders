@@ -40,29 +40,31 @@ bool Entity::isColliding(Entity * entity)
 	return false;
 }
 
-void Entity::AddComponent(Component * component)
+Component* Entity::AddComponent(Component * component)
 {
 	if(!component)
 	{
 		Log::Error("Entity:AddComponent", "Component is NULL");
-		return;
+		return NULL;
 	}
 
 	ComponentType type = component->GetType();
 	if(type == ComponentType::None || type == ComponentType::Len)
 	{
 		Log::Error("Entity:AddComponent", "Invalid component type '%s'", Common::ComponentTypeToString(type).c_str());
-		return;
+		return NULL;
 	}
 
 	if(!HasComponent(type))
 	{
 		components.push_back(component);
 		Log::Message("Component '%s' added to '%s'", Common::ComponentTypeToString(type).c_str(), name.c_str());
+		return component;
 	}
 	else
 	{
 		Log::Message("Entity '%s' already has '%s' component", name.c_str(), Common::ComponentTypeToString(type));
+		return NULL;
 	}
 }
 

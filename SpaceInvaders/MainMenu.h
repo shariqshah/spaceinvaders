@@ -2,8 +2,8 @@
 
 #include "GameState.h"
 
-
 #include <SFML\Graphics.hpp>
+#include <SFML\Audio.hpp>
 
 class Variant;
 
@@ -28,7 +28,8 @@ private:
 	};
 
 	sf::Text titleText;
-
+	sf::Sound menuSelectSound;
+	sf::Sound menuMoveSound;
 	std::vector<sf::Text> menuItemText;
 	int selectedItem = 0;
 

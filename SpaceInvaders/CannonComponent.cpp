@@ -5,6 +5,7 @@
 #include "Level.h"
 #include "ResourceManager.h"
 #include "Game.h"
+#include "SoundComponent.h"
 
 #include <SFML\System.hpp>
 
@@ -14,11 +15,13 @@ CannonComponent::CannonComponent(Game * game, Entity * entity, float speed) : Co
 {
 	// Register to relevant events
 	SubscribeToEvent(EventType::KeyDown, this, &CannonComponent::HandleKeyDown);
+	SubscribeToEvent(EventType::Collision, this, &CannonComponent::HandleCollision);
 }
 
 CannonComponent::~CannonComponent()
 {
 	UnsubscribeFromEvent(EventType::KeyDown, this);
+	UnsubscribeFromEvent(EventType::Collision, this);
 }
 
 void CannonComponent::HandleKeyDown(Object * sender, const EventDataMap& eventData)
@@ -53,10 +56,37 @@ void CannonComponent::HandleKeyDown(Object * sender, const EventDataMap& eventDa
 
 		Level* level = game->GetLevel();
 		level->AddEntity(missile);
+
+		SoundComponent* soundComponent = entity->GetComponent<SoundComponent>();
+		if(soundComponent)
+		{
+			soundComponent->Play("Sounds/CannonShoot.wav");
+		}
 	}
 
 	if(move != 0.f)
 	{
 		entity->Translate(move, 0.f);
+	}
+}
+
+void CannonComponent::HandleCollision(Object * sender, const EventDataMap & eventData)
+{
+	Entity* other = (Entity*)eventData.at("Other").GetVoidPtr();
+	if(other->HasComponent(ComponentType::Bomb))
+	{
+		// We're hit by a bomb, reduce life and check if it's game over
+		game->GetPlayerState()->lives--;
+		game->GetLevel()->UpdateLivesText();
+		if(game->GetPlayerState()->lives == 0)
+		{
+			game->SetCurrentState(Game::State::GameOver);
+		}
+
+		SoundComponent* soundComponent = entity->GetComponent<SoundComponent>();
+		if(soundComponent)
+		{
+			soundComponent->Play("Sounds/CannonHit.wav");
+		}
 	}
 }

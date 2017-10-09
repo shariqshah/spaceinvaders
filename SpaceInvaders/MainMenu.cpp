@@ -17,7 +17,7 @@ MainMenu::MainMenu(Game* game)
 		titleText.setFont(*titleFont);
 		titleText.setString("Space Invaders");
 		titleText.setCharacterSize(60);
-		titleText.setPosition(150.f, 80.f);
+		titleText.setPosition((game->GetWindowWidth() / 2.f) - (titleText.getGlobalBounds().width / 2.f), 80.f);
 	}
 
 	sf::Font* itemFont = resourceManager->GetFont("Fonts/ARCADE.ttf");
@@ -53,6 +53,18 @@ MainMenu::MainMenu(Game* game)
 	}
 
 	selectedItem = (int) MenuItems::PlayGame;
+
+	sf::SoundBuffer* moveBuffer = game->GetResourceManager()->GetSoundBuffer("Sounds/MenuMove.wav");
+	if(moveBuffer)
+	{
+		menuMoveSound.setBuffer(*moveBuffer);
+	}
+
+	sf::SoundBuffer* menuSelectBuffer = game->GetResourceManager()->GetSoundBuffer("Sounds/MenuSelect.wav");
+	if(menuSelectBuffer)
+	{
+		menuSelectSound.setBuffer(*moveBuffer);
+	}
 
 	//Setup event handlers
 	SubscribeToEvent(EventType::KeyDown, this, &MainMenu::HandleKeyDown);
@@ -109,6 +121,7 @@ void MainMenu::HandleKeyDown(Object * sender, const map<string, Variant>& data)
 		default: Log::Error("MainMenu:HandleKeyDown", "Invalid menu selection"); break;
 		};
 		game->SetCurrentState(newState);
+		menuSelectSound.play();
 	}
 
 	if(currentSelection != selectedItem) // Only do something if up or down are pressed
@@ -118,6 +131,7 @@ void MainMenu::HandleKeyDown(Object * sender, const map<string, Variant>& data)
 			selectedItem = (int)MenuItems::Len - 1;
 		else if(selectedItem >= MenuItems::Len)
 			selectedItem = 0;
+		menuMoveSound.play();
 	}
 	
 }
