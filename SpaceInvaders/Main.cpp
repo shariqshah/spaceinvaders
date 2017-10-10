@@ -10,14 +10,17 @@ float calcDistance(const sf::Vector2f& v1, const sf::Vector2f& v2);
 
 /*
 TODO:
-x Options
-- Barriers
 - Complete level
-- Sweeper
-- Fix collisions
-x Player going out of bounds
+- Multiple drone types
+- New high score screen
 - Animated sprites
 - Highscores
+x Options
+x Barriers
+x Sweeper
+x Hordes, one horde is killed off, a new one replaces it
+x Fix collisions
+x Player going out of bounds
 - Change menu sound implementation by getting the sf::Sound directly from resource manager so that the playing sf::Sound instance does not get destroyed with the GameState
 */
 

@@ -16,6 +16,6 @@ private:
 	void HandleCollision(Object* sender, const EventDataMap& eventData);
 
 	int health = 100;
-	int onHitDamage = 20;
+	int onHitDamage = 10;
 };
 

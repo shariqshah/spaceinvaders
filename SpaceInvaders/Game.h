@@ -15,7 +15,7 @@ namespace sf
 	class RenderWindow;
 }
 
-#define MAX_PLAYER_LIVES 3
+#define STARTING_PLAYER_LIVES 30
 
 class Game : public Object
 {
@@ -23,7 +23,7 @@ public:
 	struct PlayerState
 	{
 		int score = 0;
-		int lives = MAX_PLAYER_LIVES;
+		int lives = STARTING_PLAYER_LIVES;
 	};
 
 	struct Settings

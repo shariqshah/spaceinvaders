@@ -15,6 +15,7 @@ enum class ComponentType
 	Ground,
 	Sound,
 	Music,
+	Sweeper,
 	Len
 };
 

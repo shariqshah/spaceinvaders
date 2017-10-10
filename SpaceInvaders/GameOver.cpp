@@ -73,7 +73,7 @@ void GameOver::HandleKeyDown(Object * sender, const EventDataMap & eventData)
 	Keyboard::Key key = (Keyboard::Key)eventData.at("Key").GetInt();
 	Game::PlayerState* playerState = game->GetPlayerState();
 	playerState->score = 0;
-	playerState->lives = MAX_PLAYER_LIVES;
+	playerState->lives = STARTING_PLAYER_LIVES;
 	if(key == Keyboard::Return)
 	{
 		game->SetCurrentState(Game::State::MainMenu);

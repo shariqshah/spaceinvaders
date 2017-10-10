@@ -21,7 +21,7 @@ DroneComponent::DroneComponent(Game* game, Entity* entity) : Component(game, ent
 	SubscribeToEvent(EventType::LevelStart, this, &DroneComponent::HandleLevelStart);
 	SubscribeToEvent(EventType::Collision, this, &DroneComponent::HandleCollision);
 
-	shootInterval = (rand() % shootIntervalMax) + 6;
+	shootInterval = (rand() % shootIntervalMax) + 10;
 }
 
 DroneComponent::~DroneComponent()
@@ -32,11 +32,8 @@ DroneComponent::~DroneComponent()
 }
 
 void DroneComponent::HandleUpdate(Object * sender, const EventDataMap& eventData)
-{
-	float currentTime = clock.getElapsedTime().asSeconds();
-	int timeElapsed = (int)(currentTime - prevTime);
-	
-	if(currentTime >= shootInterval)
+{	
+	if(clock.getElapsedTime().asSeconds() >= shootInterval)
 	{
 		Entity* bomb = new Entity(game, "Bomb" + to_string(clock.getElapsedTime().asMicroseconds()));
 		bomb->AddComponent(new BombComponent(game, bomb, 60.f));
@@ -54,7 +51,6 @@ void DroneComponent::HandleUpdate(Object * sender, const EventDataMap& eventData
 		Level* level = game->GetLevel();
 		level->AddEntity(bomb);
 		
-		prevTime = currentTime;
 		clock.restart();
 
 		SoundComponent* soundComponent = entity->GetComponent<SoundComponent>();
@@ -69,7 +65,7 @@ void DroneComponent::HandleUpdate(Object * sender, const EventDataMap& eventData
 
 void DroneComponent::HandleLevelStart(Object * sender, const EventDataMap& eventData)
 {
-	prevTime = clock.getElapsedTime().asSeconds();
+	clock.restart();
 }
 
 void DroneComponent::HandleCollision(Object * sender, const EventDataMap& eventData)

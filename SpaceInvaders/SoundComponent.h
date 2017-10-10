@@ -20,6 +20,7 @@ public:
 
 	void AddSound(const std::string& name);
 	void Play(const std::string& name);
+	void PlayDefault();
 	void Pause(const std::string& name); 
 	void Stop(const std::string& name);
 	void SetLooped(const std::string& name, bool loop);

@@ -5,6 +5,7 @@
 #include "DroneComponent.h"
 #include "SoundComponent.h"
 #include "BarrierComponent.h"
+#include "SweeperComponent.h"
 #include "ResourceManager.h"
 #include "Log.h"
 
@@ -154,30 +155,6 @@ void Level::Initialize()
 	AddEntity(player);
 	SetPlayer(player);
 
-	// Add Drones
-	sf::Texture* droneTexture = game->GetResourceManager()->GetTexture("Textures/drone.png");
-	dronesLeft = 0;
-	int numRows = 5, numColumns = 18;
-	float gapX = 20, gapY = 60.f;
-	for(int i = 0; i < numRows; i++)
-	{
-		for(int j = 0; j < numColumns; j++)
-		{
-			Entity* drone = new Entity(game, "Drone" + to_string(dronesLeft + 1));
-			drone->AddComponent(new DroneComponent(game, drone));
-			sf::Sprite* droneSprite = drone->GetSprite();
-			droneSprite->setTexture(*droneTexture);
-			drone->SetPosition((marginX * 2.5f) + (droneTexture->getSize().x * j) + (j * gapX), marginY + (i * gapY));
-
-			SoundComponent* droneSoundComponent = (SoundComponent*)drone->AddComponent(new SoundComponent(game, drone));
-			droneSoundComponent->AddSound("Sounds/DroneShoot.wav");
-			droneSoundComponent->AddSound("Sounds/DroneHit.wav");
-
-			AddEntity(drone);
-			dronesLeft++;
-		}
-	}
-
 	//Add Ground
 	Entity* ground = new Entity(game, "Ground");
 	sf::RenderWindow* window = game->GetWindow();
@@ -203,14 +180,34 @@ void Level::Initialize()
 		barrier->SetPosition(marginX + (barrierTexture->getSize().x + barrierGap * i), game->GetWindowHeight() - 200);
 
 		SoundComponent* barrierSoundComponent = (SoundComponent*)barrier->AddComponent(new SoundComponent(game, barrier));
-		barrierSoundComponent->AddSound("Sounds/CannonHit.wav");
+		barrierSoundComponent->AddSound("Sounds/BarrierHit.wav");
 		AddEntity(barrier);
 	}
+
+	//Add Sweeper
+	Entity* sweeper = new Entity(game, "Sweeper");
+	sweeper->AddComponent(new SweeperComponent(game, sweeper));
+	sf::Texture* sweeperTexture = game->GetResourceManager()->GetTexture("Textures/sweeper.png");
+	sf::Sprite* sweeperSprite = sweeper->GetSprite();
+	sweeperSprite->setTexture(*sweeperTexture);
+
+	SoundComponent* sweeperSoundComponent = (SoundComponent*)sweeper->AddComponent(new SoundComponent(game, sweeper));
+	sweeperSoundComponent->AddSound("Sounds/SweeperMove.wav");
+	sweeperSoundComponent->SetLooped("Sounds/SweeperSound.wav", true);
+
+	sweeperSoundComponent->AddSound("Sounds/SweeperHit.wav");
+
+	AddEntity(sweeper);
+
+	//Spawn the first drone horde
+	hordeNum = 1;
+	SpawnHorde();
 }
 
-void Level::UpdateLivesText()
+void Level::UpdatePlayerStatsText()
 {
 	livesText.setString("Lives : " + to_string(game->GetPlayerState()->lives));
+	scoreText.setString("Score : " + to_string(game->GetPlayerState()->score));
 }
 
 void Level::HandlePostUpdate(Object * sender, const EventDataMap & eventData)
@@ -251,10 +248,40 @@ void Level::HandleDroneDestroyed(Object * sender, const EventDataMap & eventData
 	scoreText.setString("Score : " + to_string(game->GetPlayerState()->score));
 	scoreText.setPosition((game->GetWindowWidth() / 2) - (scoreText.getLocalBounds().width / 2.f), 10.f);
 	dronesLeft--;
+	Log::Message("Drones left : %d", dronesLeft);
 
 	if(dronesLeft == 0)
 	{
-		// Level cleared, player won
-		game->SetCurrentState(Game::State::GameOver);
+		// Level cleared, spawn new, more difficult horde
+		hordeNum++;
+		SpawnHorde();
+		//game->SetCurrentState(Game::State::GameOver);
+	}
+}
+
+void Level::SpawnHorde()
+{
+	// Add Drones
+	sf::Texture* droneTexture = game->GetResourceManager()->GetTexture("Textures/drone.png");
+	dronesLeft = 0;
+	int numRows = 5, numColumns = 18;
+	float gapX = 20, gapY = 60.f;
+	for(int i = 0; i < numRows; i++)
+	{
+		for(int j = 0; j < numColumns; j++)
+		{
+			Entity* drone = new Entity(game, "Drone" + to_string(dronesLeft + 1));
+			drone->AddComponent(new DroneComponent(game, drone));
+			sf::Sprite* droneSprite = drone->GetSprite();
+			droneSprite->setTexture(*droneTexture);
+			drone->SetPosition((marginX * 2.5f) + (droneTexture->getSize().x * j) + (j * gapX), marginY + (i * gapY));
+
+			SoundComponent* droneSoundComponent = (SoundComponent*)drone->AddComponent(new SoundComponent(game, drone));
+			droneSoundComponent->AddSound("Sounds/DroneShoot.wav");
+			droneSoundComponent->AddSound("Sounds/DroneHit.wav");
+
+			AddEntity(drone);
+			dronesLeft++;
+		}
 	}
 }

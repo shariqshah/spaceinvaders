@@ -27,7 +27,7 @@ public:
 	void AddEntity(Entity* entity);
 	void RemoveEntity(Entity* entity);
 	void Initialize();
-	void UpdateLivesText();
+	void UpdatePlayerStatsText();
 	void SetPlayer(Entity* entity) { playerEntity = entity; };
 	Entity* GetPlayer() { return playerEntity; };
 	int GetMarginX() { return marginX; }
@@ -43,10 +43,12 @@ private:
 	Entity* playerEntity = NULL;
 	int numDronesToSpawn = 10;
 	int dronesLeft = 10;
+	int hordeNum = 0;
 	int marginX = 20;
 	int marginY = 90;
 
 	void HandlePostUpdate(Object* sender, const EventDataMap& eventData);
 	void HandleDroneDestroyed(Object* sender, const EventDataMap& eventData);
+	void SpawnHorde();
 };
 

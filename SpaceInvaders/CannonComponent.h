@@ -20,9 +20,11 @@ public:
 private:
 	void HandleUpdate(Object* sender, const EventDataMap& eventData);
 	void HandleKeyDown(Object* sender, const EventDataMap& eventData);
+	void HandleKeyUp(Object* sender, const EventDataMap& eventData);
 	void HandleCollision(Object* sender, const EventDataMap& eventData);
 
 	float moveSpeed = 5.f;
+	bool canShoot = true;
 	sf::Clock clock;
 
 	SoundComponent* soundComponent = NULL; //Pointer to sound component

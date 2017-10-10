@@ -37,7 +37,7 @@ void MissileComponent::HandleCollision(Object * sender, const EventDataMap & eve
 		level->RemoveEntity(entity);
 		level->RemoveEntity(other);
 	}
-	else if(other->HasComponent(ComponentType::Barrier))
+	else if(other->HasComponent(ComponentType::Barrier) || other->HasComponent(ComponentType::Sweeper))
 	{
 		level->RemoveEntity(entity);
 	}

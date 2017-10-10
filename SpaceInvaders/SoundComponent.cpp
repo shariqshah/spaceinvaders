@@ -51,6 +51,19 @@ void SoundComponent::Play(const std::string & name)
 	}
 }
 
+void SoundComponent::PlayDefault()
+{
+	if(sounds.size() > 0)
+	{
+		auto soundEntry = sounds.begin();
+		sf::Sound* sound = soundEntry->second;
+		if(sound)
+		{
+			sound->play();
+		}
+	}
+}
+
 void SoundComponent::Pause(const std::string & name)
 {
 	auto soundEntry = sounds.find(name);

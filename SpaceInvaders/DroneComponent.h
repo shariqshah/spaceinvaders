@@ -19,8 +19,7 @@ private:
 	void HandleCollision(Object* sender, const EventDataMap& eventData);
 
 	sf::Clock clock;
-	const int shootIntervalMax = 20; // maximum number of seconds after which drone drops a bomb
+	const int shootIntervalMax = 30; // maximum number of seconds after which drone drops a bomb
 	int shootInterval = 0;
-	float prevTime;
 };
 

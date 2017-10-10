@@ -78,6 +78,15 @@ void Game::Run()
 					window->close();
 				}*/	
 			}
+			else if(event.type == sf::Event::KeyReleased)
+			{
+				auto eventData = eventManager->GetEventDataMap();
+
+				eventData.insert(pair<string, Variant>("Key", Variant((int)event.key.code)));
+				eventData.insert(pair<string, Variant>("Control", Variant(event.key.control)));
+				eventData.insert(pair<string, Variant>("Shift", Variant(event.key.shift)));
+				eventManager->SendEvent(EventType::KeyUp, this, eventData);
+			}
 		}
 
 		float currentTime = (float)clock.getElapsedTime().asSeconds();

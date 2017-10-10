@@ -28,7 +28,7 @@ void BarrierComponent::HandleCollision(Object * sender, const EventDataMap & eve
 		{
 			Game::Settings* settings = game->GetSettings();
 			if(settings->soundOn)
-				soundComponent->Play("Sounds/CannonHit.wav");
+				soundComponent->PlayDefault();
 		}
 
 		if(health <= 0)
