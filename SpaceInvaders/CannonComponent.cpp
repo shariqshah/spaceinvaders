@@ -14,14 +14,44 @@ using namespace std;
 CannonComponent::CannonComponent(Game * game, Entity * entity, float speed) : Component(game, entity), moveSpeed(speed)
 {
 	// Register to relevant events
+	SubscribeToEvent(EventType::Update, this, &CannonComponent::HandleUpdate);
 	SubscribeToEvent(EventType::KeyDown, this, &CannonComponent::HandleKeyDown);
 	SubscribeToEvent(EventType::Collision, this, &CannonComponent::HandleCollision);
 }
 
 CannonComponent::~CannonComponent()
 {
+	UnsubscribeFromEvent(EventType::Update, this);
 	UnsubscribeFromEvent(EventType::KeyDown, this);
 	UnsubscribeFromEvent(EventType::Collision, this);
+}
+
+void CannonComponent::HandleUpdate(Object * sender, const EventDataMap & eventData)
+{
+	using sf::Keyboard;
+	float move = 0.f;
+	Game::Settings* settings = game->GetSettings();
+	if(Keyboard::isKeyPressed(settings->right))
+	{
+		move += (moveSpeed * game->GetDeltaTime());
+	}
+	else if(Keyboard::isKeyPressed(settings->left))
+	{
+		move -= (moveSpeed * game->GetDeltaTime());
+	}
+
+	if(move != 0.f)
+	{
+		//Check if moving makes us go out of screen margins then cancel the move
+		Level* level = game->GetLevel();
+		float expectedX = entity->GetPositionX() + move;
+		sf::Sprite* sprite = entity->GetSprite();
+		if(expectedX < level->GetMarginX() || (expectedX + sprite->getLocalBounds().width) > (game->GetWindowWidth() - level->GetMarginX()))
+		{
+			move = 0.f;
+		}
+		entity->Translate(move, 0.f);
+	}
 }
 
 void CannonComponent::HandleKeyDown(Object * sender, const EventDataMap& eventData)
@@ -29,8 +59,8 @@ void CannonComponent::HandleKeyDown(Object * sender, const EventDataMap& eventDa
 	using sf::Keyboard;
 	Keyboard::Key key = (Keyboard::Key)eventData.at("Key").GetInt();
 
-	float move = 0.f;
 	Game::Settings* settings = game->GetSettings();
+	/*float move = 0.f;
 	if(key == settings->right)
 	{
 		move += (moveSpeed * game->GetDeltaTime());
@@ -38,7 +68,7 @@ void CannonComponent::HandleKeyDown(Object * sender, const EventDataMap& eventDa
 	else if(key == settings->left)
 	{
 		move -= (moveSpeed * game->GetDeltaTime());
-	}
+	}*/
 	
 	if(key == settings->shoot)
 	{
@@ -66,18 +96,18 @@ void CannonComponent::HandleKeyDown(Object * sender, const EventDataMap& eventDa
 		}
 	}
 
-	if(move != 0.f)
-	{
-		//Check if moving makes us go out of screen margins then cancel the move
-		Level* level = game->GetLevel();
-		float expectedX = entity->GetPositionX() + move;
-		sf::Sprite* sprite = entity->GetSprite();
-		if(expectedX < level->GetMarginX() || (expectedX + sprite->getLocalBounds().width) > (game->GetWindowWidth() - level->GetMarginX()))
-		{
-			move = 0.f;
-		}
-		entity->Translate(move, 0.f);
-	}
+	//if(move != 0.f)
+	//{
+	//	//Check if moving makes us go out of screen margins then cancel the move
+	//	Level* level = game->GetLevel();
+	//	float expectedX = entity->GetPositionX() + move;
+	//	sf::Sprite* sprite = entity->GetSprite();
+	//	if(expectedX < level->GetMarginX() || (expectedX + sprite->getLocalBounds().width) > (game->GetWindowWidth() - level->GetMarginX()))
+	//	{
+	//		move = 0.f;
+	//	}
+	//	entity->Translate(move, 0.f);
+	//}
 }
 
 void CannonComponent::HandleCollision(Object * sender, const EventDataMap & eventData)

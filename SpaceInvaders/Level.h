@@ -44,7 +44,7 @@ private:
 	int numDronesToSpawn = 10;
 	int dronesLeft = 10;
 	int marginX = 20;
-	int marginY = 30;
+	int marginY = 90;
 
 	void HandlePostUpdate(Object* sender, const EventDataMap& eventData);
 	void HandleDroneDestroyed(Object* sender, const EventDataMap& eventData);

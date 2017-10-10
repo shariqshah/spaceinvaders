@@ -14,9 +14,9 @@ public:
 	virtual ComponentType GetType() override { return ComponentType::Drone; }
 
 private:
-	void HandleUpdate(Object* sender, const std::map<std::string, Variant>& eventData);
-	void HandleLevelStart(Object* sender, const std::map<std::string, Variant>& eventData);
-	void HandleCollision(Object* sender, const std::map<std::string, Variant>& eventData);
+	void HandleUpdate(Object* sender, const EventDataMap& eventData);
+	void HandleLevelStart(Object* sender, const EventDataMap& eventData);
+	void HandleCollision(Object* sender, const EventDataMap& eventData);
 
 	sf::Clock clock;
 	const int shootIntervalMax = 20; // maximum number of seconds after which drone drops a bomb

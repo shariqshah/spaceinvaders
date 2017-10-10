@@ -18,6 +18,7 @@ public:
 	virtual ComponentType GetType() override { return ComponentType::Cannon; }
 
 private:
+	void HandleUpdate(Object* sender, const EventDataMap& eventData);
 	void HandleKeyDown(Object* sender, const EventDataMap& eventData);
 	void HandleCollision(Object* sender, const EventDataMap& eventData);
 

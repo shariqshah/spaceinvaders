@@ -41,14 +41,14 @@ Game::Game()
 
 Game::~Game()
 {
-	if(window) delete window;
-	if(resourceManager) delete resourceManager;
-	if(eventManager) delete eventManager;
-
 	for(GameState* state : gameStates)
 	{
 		if(state) delete state;
 	}
+
+	if(window) delete window;
+	if(resourceManager) delete resourceManager;
+	if(eventManager) delete eventManager;
 }
 
 void Game::Run()

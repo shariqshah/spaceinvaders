@@ -162,6 +162,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BarrierComponent.cpp" />
     <ClCompile Include="BombComponent.cpp" />
     <ClCompile Include="CannonComponent.cpp" />
     <ClCompile Include="Common.cpp" />
@@ -185,6 +186,7 @@
     <ClCompile Include="Variant.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BarrierComponent.h" />
     <ClInclude Include="BombComponent.h" />
     <ClInclude Include="CannonComponent.h" />
     <ClInclude Include="Common.h" />

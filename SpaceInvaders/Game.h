@@ -47,7 +47,7 @@ public:
 	};
 
 	Game();
-	~Game();
+	virtual ~Game();
 
 	void Run();
 	sf::RenderWindow* GetWindow() { return window; }

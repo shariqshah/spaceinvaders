@@ -21,7 +21,7 @@ class Object
 public:
 	Object() : game(NULL) {};
 	Object(Game* gameInstance);
-	~Object();
+	virtual ~Object();
 	Object(const Object& other) : game(other.GetGame()){}
 
 	Game* GetGame() const { return game; };

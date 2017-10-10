@@ -28,9 +28,10 @@ DroneComponent::~DroneComponent()
 {
 	UnsubscribeFromEvent(EventType::Update, this);
 	UnsubscribeFromEvent(EventType::LevelStart, this);
+	UnsubscribeFromEvent(EventType::Collision, this);
 }
 
-void DroneComponent::HandleUpdate(Object * sender, const map<string, Variant>& eventData)
+void DroneComponent::HandleUpdate(Object * sender, const EventDataMap& eventData)
 {
 	float currentTime = clock.getElapsedTime().asSeconds();
 	int timeElapsed = (int)(currentTime - prevTime);
@@ -66,12 +67,12 @@ void DroneComponent::HandleUpdate(Object * sender, const map<string, Variant>& e
 	}
 }
 
-void DroneComponent::HandleLevelStart(Object * sender, const map<string, Variant>& eventData)
+void DroneComponent::HandleLevelStart(Object * sender, const EventDataMap& eventData)
 {
 	prevTime = clock.getElapsedTime().asSeconds();
 }
 
-void DroneComponent::HandleCollision(Object * sender, const std::map<std::string, Variant>& eventData)
+void DroneComponent::HandleCollision(Object * sender, const EventDataMap& eventData)
 {
 	Entity* other = (Entity*)eventData.at("Other").GetVoidPtr();
 	if(other->HasComponent(ComponentType::Missile))

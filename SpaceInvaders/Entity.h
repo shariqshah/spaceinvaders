@@ -51,6 +51,9 @@ public:
 	float GetPositionX() { return sprite.getPosition().x; }
 	float GetPositionY() { return sprite.getPosition().y; }
 
+	float GetScaleX() { return sprite.getScale().x; }
+	float GetScaleY() { return sprite.getScale().y; }
+
 	bool IsCheckedForCollisions() { return checkedForCollisions; }
 	void SetCheckedForCollisions(bool checked) { checkedForCollisions = checked; }
 

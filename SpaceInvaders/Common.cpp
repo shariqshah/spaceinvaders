@@ -12,6 +12,8 @@ std::string Common::ComponentTypeToString(ComponentType type)
 	case ComponentType::Drone:   return std::string("Drone");
 	case ComponentType::Ground:  return std::string("Ground");
 	case ComponentType::None:    return std::string("None");
+	case ComponentType::Music:   return std::string("Music");
+	case ComponentType::Sound:   return std::string("Sound");
 	case ComponentType::Len:     return std::string("Len");
 	default: return std::string("Invalid Component Type");
 	}
