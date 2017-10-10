@@ -5,7 +5,6 @@ Object::Object(Game* gameInstance) : game(gameInstance)
 {
 }
 
-
 Object::~Object()
 {
 }

@@ -63,7 +63,7 @@ MainMenu::MainMenu(Game* game)
 	sf::SoundBuffer* menuSelectBuffer = game->GetResourceManager()->GetSoundBuffer("Sounds/MenuSelect.wav");
 	if(menuSelectBuffer)
 	{
-		menuSelectSound.setBuffer(*moveBuffer);
+		menuSelectSound.setBuffer(*menuSelectBuffer);
 	}
 
 	//Setup event handlers
@@ -114,7 +114,7 @@ void MainMenu::HandleKeyDown(Object * sender, const map<string, Variant>& data)
 		Game::State newState = game->GetCurrentState();
 		switch(selectedItem)
 		{
-		case MenuItems::PlayGame:  newState = Game::State::Level;    break;
+		case MenuItems::PlayGame:  newState = Game::State::Level;     break;
 		case MenuItems::Options:   newState = Game::State::Options;   break;
 		case MenuItems::HighScore: newState = Game::State::HighScore; break;
 		case MenuItems::Quit:      newState = Game::State::Quit;      break;

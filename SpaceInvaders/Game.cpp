@@ -31,9 +31,7 @@ Game::Game()
 	// Create all game states
 	gameStates.resize((int)State::Len);
 	gameStates[(int)State::MainMenu]  = new MainMenu(this);
-	/*gameStates[(int)State::Options]   = new Options(this);
-	gameStates[(int)State::HighScore] = new HighScore(this);
-	gameStates[(int)State::GameOver]  = new GameOver(this);*/
+
 	currentState = State::MainMenu;
 	requestedState = currentState;
 
@@ -75,10 +73,10 @@ void Game::Run()
 				eventData.insert(pair<string, Variant>("Shift", Variant(event.key.shift)));
 				eventManager->SendEvent(EventType::KeyDown, this, eventData);
 
-				if(event.key.code == sf::Keyboard::Escape)
+				/*if(event.key.code == sf::Keyboard::Escape)
 				{
 					window->close();
-				}	
+				}*/	
 			}
 		}
 
@@ -150,6 +148,11 @@ void Game::SetRequestedState()
 	case State::MainMenu:
 	{
 		gameStates[(int)Game::State::MainMenu] = new MainMenu(this);
+	}
+	break;
+	case State::Options:
+	{
+		gameStates[(int)Game::State::Options] = new Options(this);
 	}
 	break;
 	};

@@ -1,7 +1,9 @@
 #pragma once
 
 #include "Object.h"
+
 #include <vector>
+#include <SFML\Window.hpp>
 
 class GameState;
 class ResourceManager;
@@ -22,6 +24,15 @@ public:
 	{
 		int score = 0;
 		int lives = MAX_PLAYER_LIVES;
+	};
+
+	struct Settings
+	{
+		bool soundOn            = true;
+		bool musicOn            = true;
+		sf::Keyboard::Key left  = sf::Keyboard::Left;
+		sf::Keyboard::Key right = sf::Keyboard::Right;
+		sf::Keyboard::Key shoot = sf::Keyboard::Space;
 	};
 
 	enum class State
@@ -49,13 +60,15 @@ public:
 	int GetWindowWidth();
 	int GetWindowHeight();
 	Level* GetLevel();
-	PlayerState* GetPlayerState() { return &playerState; };
+	PlayerState* GetPlayerState() { return &playerState; }
+	Settings* GetSettings() { return &settings; }
 
 private:
 	std::vector<GameState*> gameStates;
 	sf::RenderWindow* window;
 	ResourceManager* resourceManager;
 	EventManager* eventManager;
+	Settings settings;
 
 	State currentState;
 	State requestedState;

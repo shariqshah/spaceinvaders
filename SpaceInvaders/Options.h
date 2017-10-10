@@ -3,17 +3,48 @@
 #include "GameState.h"
 
 #include <SFML\Graphics.hpp>
+#include <SFML\Audio.hpp>
 
 class Options : public GameState
 {
 public:
 	Options() {}
 	Options(Game* game);
-	~Options();
+	virtual ~Options();
 
 	virtual void Update(float deltaTime) override;
 	virtual void Draw() override;
 private:
+	enum class OptionType
+	{
+		Sound = 0,
+		Music,
+		Keys,
+		KeyLeft,
+		KeyRight,
+		KeyShoot,
+		Len
+	};
+
+	// The key that is currently being remapped, used when re-mapping left, right or shoot key
+	enum class SelectedKey
+	{
+		None = 0,
+		Left,
+		Right,
+		Shoot
+	};
+
+	void HandleKeyDown(Object* sender, const EventDataMap& eventData);
+	const char* GetKeyName(const sf::Keyboard::Key key);
+
 	sf::Text titleText;
+	sf::Text instructionText;
+	std::vector<sf::Text> optionTypeTexts;
+	sf::Sound moveSound;
+	sf::Sound selectSound;
+
+	SelectedKey selectedKey = SelectedKey::None;
+	int selectedItem = 0;
 };
 

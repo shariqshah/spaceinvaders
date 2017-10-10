@@ -17,6 +17,8 @@ TODO:
 - Fix collisions
 - Player going out pf bounds
 - Animated sprites
+- Highscores
+- Change menu sound implementation by getting the sf::Sound directly from resource manager so that the playing sf::Sound instance does not get destroyed with the GameState
 */
 
 int main(int argc, const char** argv)
