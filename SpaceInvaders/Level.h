@@ -5,6 +5,11 @@
 #include <map>
 #include <SFML\Graphics.hpp>
 
+namespace sf
+{
+	class Music;
+}
+
 class Entity;
 
 class Level : public GameState
@@ -29,6 +34,8 @@ public:
 private:
 	sf::Text scoreText;
 	sf::Text livesText;
+	sf::Music* music = NULL;
+
 	std::map<std::string, Entity*> entities;
 	std::vector<Entity*> markedEntites;
 	Entity* playerEntity = NULL;

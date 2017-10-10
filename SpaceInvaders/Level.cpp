@@ -8,6 +8,7 @@
 #include "Log.h"
 
 #include <assert.h>
+#include <SFML\Audio.hpp>
 
 using namespace std;
 
@@ -26,6 +27,13 @@ Level::Level(Game* game)
 		livesText.setPosition(30.f, 10.f);
 	}
 
+	music = game->GetResourceManager()->GetMusic("Music/LevelMusic.ogg");
+	if(music)
+	{
+		music->setLoop(true);
+		music->play();
+	}
+
 	SubscribeToEvent(EventType::PostUpdate, this, &Level::HandlePostUpdate);
 	SubscribeToEvent(EventType::DroneDestroyed, this, &Level::HandleDroneDestroyed);
 }
@@ -40,6 +48,11 @@ Level::~Level()
 		Entity* entity = entityEntry.second;
 		delete entity;
 		entity = NULL;
+	}
+
+	if(music)
+	{
+		music->stop();
 	}
 }
 

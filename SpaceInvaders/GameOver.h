@@ -3,6 +3,7 @@
 #include "GameState.h"
 
 #include <SFML\Graphics.hpp>
+#include <SFML\Audio.hpp>
 
 class GameOver : public GameState
 {
@@ -18,6 +19,9 @@ private:
 	sf::Text messageText;
 	sf::Text scoreText;
 	sf::Text instructionText;
+	sf::Sound gameOverSound;
+	sf::Sound selectSound;
+	bool soundPlayed = false;
 
 	void HandleKeyDown(Object* sender, const EventDataMap& eventData);
 };

@@ -26,6 +26,19 @@ GameOver::GameOver(Game* game) : GameState(game)
 		instructionText.setCharacterSize(30);
 		instructionText.setPosition((game->GetWindowWidth()  / 2.f) - (instructionText.getGlobalBounds().width / 2.f), (game->GetWindowHeight() / 2.f) + 60);
 	}
+
+	sf::SoundBuffer* soundBuffer = game->GetResourceManager()->GetSoundBuffer("Sounds/GameOver.wav");
+	if(soundBuffer)
+	{
+		gameOverSound.setBuffer(*soundBuffer);
+	}
+
+	sf::SoundBuffer* selectSoundBuffer = game->GetResourceManager()->GetSoundBuffer("Sounds/MenuSelect.wav");
+	if(selectSoundBuffer)
+	{
+		selectSound.setBuffer(*selectSoundBuffer);
+	}
+
 	SubscribeToEvent(EventType::KeyDown, this, &GameOver::HandleKeyDown);
 }
 
@@ -37,6 +50,11 @@ GameOver::~GameOver()
 
 void GameOver::Update(float deltaTime)
 {
+	if(!soundPlayed)
+	{
+		gameOverSound.play();
+		soundPlayed = true;
+	}
 }
 
 void GameOver::Draw()
@@ -59,5 +77,6 @@ void GameOver::HandleKeyDown(Object * sender, const EventDataMap & eventData)
 	if(key == Keyboard::Return)
 	{
 		game->SetCurrentState(Game::State::MainMenu);
+		selectSound.play();
 	}
 }
