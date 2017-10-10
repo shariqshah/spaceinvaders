@@ -10,7 +10,7 @@ float calcDistance(const sf::Vector2f& v1, const sf::Vector2f& v2);
 
 /*
 TODO:
-- Options
+x Options
 - Barriers
 - Complete level
 - Sweeper

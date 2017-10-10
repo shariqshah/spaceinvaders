@@ -30,16 +30,17 @@ void CannonComponent::HandleKeyDown(Object * sender, const EventDataMap& eventDa
 	Keyboard::Key key = (Keyboard::Key)eventData.at("Key").GetInt();
 
 	float move = 0.f;
-	if(key == Keyboard::Right)
+	Game::Settings* settings = game->GetSettings();
+	if(key == settings->right)
 	{
 		move += (moveSpeed * game->GetDeltaTime());
 	}
-	else if(key == Keyboard::Left)
+	else if(key == settings->left)
 	{
 		move -= (moveSpeed * game->GetDeltaTime());
 	}
 	
-	if(key == Keyboard::Space)
+	if(key == settings->shoot)
 	{
 		Entity* missile = new Entity(game, "Missile" + to_string(clock.getElapsedTime().asMilliseconds()));
 		missile->AddComponent(new MissileComponent(game, missile, -200.f));
@@ -60,7 +61,8 @@ void CannonComponent::HandleKeyDown(Object * sender, const EventDataMap& eventDa
 		SoundComponent* soundComponent = entity->GetComponent<SoundComponent>();
 		if(soundComponent)
 		{
-			soundComponent->Play("Sounds/CannonShoot.wav");
+			if(settings->soundOn)
+				soundComponent->Play("Sounds/CannonShoot.wav");
 		}
 	}
 
@@ -86,7 +88,9 @@ void CannonComponent::HandleCollision(Object * sender, const EventDataMap & even
 		SoundComponent* soundComponent = entity->GetComponent<SoundComponent>();
 		if(soundComponent)
 		{
-			soundComponent->Play("Sounds/CannonHit.wav");
+			Game::Settings* settings = game->GetSettings();
+			if(settings->soundOn)
+				soundComponent->Play("Sounds/CannonHit.wav");
 		}
 	}
 }

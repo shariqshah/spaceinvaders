@@ -31,7 +31,9 @@ Level::Level(Game* game)
 	if(music)
 	{
 		music->setLoop(true);
-		music->play();
+		Game::Settings* settings = game->GetSettings();
+		if(settings->musicOn)
+			music->play();
 	}
 
 	SubscribeToEvent(EventType::PostUpdate, this, &Level::HandlePostUpdate);
@@ -52,7 +54,8 @@ Level::~Level()
 
 	if(music)
 	{
-		music->stop();
+		if(music->getStatus() == sf::Music::Playing)
+			music->stop();
 	}
 }
 

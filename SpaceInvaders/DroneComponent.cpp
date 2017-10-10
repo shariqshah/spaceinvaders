@@ -59,7 +59,9 @@ void DroneComponent::HandleUpdate(Object * sender, const map<string, Variant>& e
 		SoundComponent* soundComponent = entity->GetComponent<SoundComponent>();
 		if(soundComponent)
 		{
-			soundComponent->Play("Sounds/DroneShoot.wav");
+			Game::Settings* settings = game->GetSettings();
+			if(settings->soundOn)
+				soundComponent->Play("Sounds/DroneShoot.wav");
 		}
 	}
 }
@@ -77,7 +79,9 @@ void DroneComponent::HandleCollision(Object * sender, const std::map<std::string
 		SoundComponent* soundComponent = entity->GetComponent<SoundComponent>();
 		if(soundComponent)
 		{
-			soundComponent->Play("Sounds/DroneHit.wav");
+			Game::Settings* settings = game->GetSettings();
+			if(settings->soundOn)
+				soundComponent->Play("Sounds/DroneHit.wav");
 		}
 	}
 }
