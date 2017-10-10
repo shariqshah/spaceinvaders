@@ -30,6 +30,8 @@ public:
 	void UpdateLivesText();
 	void SetPlayer(Entity* entity) { playerEntity = entity; };
 	Entity* GetPlayer() { return playerEntity; };
+	int GetMarginX() { return marginX; }
+	int GetMarginY() { return marginY; }
 
 private:
 	sf::Text scoreText;
@@ -41,6 +43,8 @@ private:
 	Entity* playerEntity = NULL;
 	int numDronesToSpawn = 10;
 	int dronesLeft = 10;
+	int marginX = 20;
+	int marginY = 30;
 
 	void HandlePostUpdate(Object* sender, const EventDataMap& eventData);
 	void HandleDroneDestroyed(Object* sender, const EventDataMap& eventData);

@@ -15,7 +15,7 @@ x Options
 - Complete level
 - Sweeper
 - Fix collisions
-- Player going out pf bounds
+x Player going out of bounds
 - Animated sprites
 - Highscores
 - Change menu sound implementation by getting the sf::Sound directly from resource manager so that the playing sf::Sound instance does not get destroyed with the GameState

@@ -68,6 +68,14 @@ void CannonComponent::HandleKeyDown(Object * sender, const EventDataMap& eventDa
 
 	if(move != 0.f)
 	{
+		//Check if moving makes us go out of screen margins then cancel the move
+		Level* level = game->GetLevel();
+		float expectedX = entity->GetPositionX() + move;
+		sf::Sprite* sprite = entity->GetSprite();
+		if(expectedX < level->GetMarginX() || (expectedX + sprite->getLocalBounds().width) > (game->GetWindowWidth() - level->GetMarginX()))
+		{
+			move = 0.f;
+		}
 		entity->Translate(move, 0.f);
 	}
 }
