@@ -34,7 +34,7 @@ void BombComponent::HandleCollision(Object * sender, const EventDataMap& eventDa
 	Entity* collidedEntity = (Entity*)eventData.at("Other").GetVoidPtr();
 	if(!collidedEntity->HasComponent(ComponentType::Drone))
 	{
-		Log::Message("Bomb Collided with %s", collidedEntity->GetName().c_str());
+		//Log::Message("Bomb Collided with %s", collidedEntity->GetName().c_str());
 		Level* level = game->GetLevel();
 		level->RemoveEntity(entity);
 	}

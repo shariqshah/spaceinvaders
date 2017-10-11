@@ -5,6 +5,8 @@
 #include "Entity.h"
 #include "Level.h"
 
+using namespace std;
+
 BarrierComponent::BarrierComponent(Game * game, Entity * entity, int startingHealth) : Component(game, entity), health(startingHealth)
 {
 	SubscribeToEvent(EventType::Collision, this, &BarrierComponent::HandleCollision);
@@ -33,7 +35,24 @@ void BarrierComponent::HandleCollision(Object * sender, const EventDataMap & eve
 
 		if(health <= 0)
 		{
+			// Remove barrier from list of barriers and remove entity altogether
 			Level* level = game->GetLevel();
+			vector<Entity*>& barriers = level->GetBarriers();
+			int index = -1;
+			for(int i = 0; i < barriers.size(); i++)
+			{
+				if(barriers[i] == entity)
+				{
+					index = i;
+					break;
+				}
+			}
+
+			if(index != -1)
+			{
+				barriers.erase(barriers.begin() + index);
+			}
+
 			level->RemoveEntity(entity);
 		}
 	}

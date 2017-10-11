@@ -58,7 +58,7 @@ Component* Entity::AddComponent(Component * component)
 	if(!HasComponent(type))
 	{
 		components.push_back(component);
-		Log::Message("Component '%s' added to '%s'", Common::ComponentTypeToString(type).c_str(), name.c_str());
+		//Log::Message("Component '%s' added to '%s'", Common::ComponentTypeToString(type).c_str(), name.c_str());
 		return component;
 	}
 	else

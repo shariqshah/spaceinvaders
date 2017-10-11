@@ -18,6 +18,6 @@ enum class EventType
 	LevelStart,      // Params: None
 	LevelEnd,        // Params: None
 	Collision,       // Params: Other : Entity*
-	DroneDestroyed,  // Params: None
+	DroneDestroyed,  // Params: DroneType : DroneType
 	Len
 };

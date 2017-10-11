@@ -1,20 +1,16 @@
-#include <SFML/Graphics.hpp>
-#include <SFML/Audio.hpp>
-#include <stdlib.h>
-#include <time.h>
-
 #include "Log.h"
 #include "Game.h"
 
-float calcDistance(const sf::Vector2f& v1, const sf::Vector2f& v2);
-
 /*
 TODO:
-- Complete level
-- Multiple drone types
 - New high score screen
-- Animated sprites
 - Highscores
+- Complete level
+- Animated sprites
+- Missile and bombs apply damage
+- Drone bomb damage depends on drone type
+- Difficulty related variables in game settings e.g. lives, player speed, drone fire-rate etc
+x Multiple drone types
 x Options
 x Barriers
 x Sweeper
@@ -32,11 +28,4 @@ int main(int argc, const char** argv)
 	Log::Message("Game exiting...");
 
 	return 0;
-}
-
-float calcDistance(const sf::Vector2f& v1, const sf::Vector2f& v2)
-{
-	sf::Vector2f diff = v2 - v1;
-	float distance = sqrtf((diff.x * diff.x) + (diff.y * diff.y));
-	return fabsf(distance);
 }

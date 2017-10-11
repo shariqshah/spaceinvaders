@@ -23,6 +23,8 @@ public:
 	virtual void Draw() override;
 
 	std::map<std::string, Entity*>& GetEntites() { return entities; }
+	std::vector<Entity*>& GetBarriers() { return barriers; };
+	std::vector<Entity*>& GetDrones() { return drones; };
 
 	void AddEntity(Entity* entity);
 	void RemoveEntity(Entity* entity);
@@ -40,15 +42,19 @@ private:
 
 	std::map<std::string, Entity*> entities;
 	std::vector<Entity*> markedEntites;
+	std::vector<Entity*> barriers;
+	std::vector<Entity*> drones;
 	Entity* playerEntity = NULL;
 	int numDronesToSpawn = 10;
 	int dronesLeft = 10;
 	int hordeNum = 0;
 	int marginX = 20;
 	int marginY = 90;
+	bool spawnNewHorde = false;
 
 	void HandlePostUpdate(Object* sender, const EventDataMap& eventData);
 	void HandleDroneDestroyed(Object* sender, const EventDataMap& eventData);
 	void SpawnHorde();
+	void SpawnBarriers();
 };
 

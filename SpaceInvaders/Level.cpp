@@ -167,22 +167,7 @@ void Level::Initialize()
 	AddEntity(ground);
 
 	//Add Barriers
-	int numBarriers = 5;
-	float barrierGap = 150.f;
-	sf::Texture* barrierTexture = game->GetResourceManager()->GetTexture("Textures/barrier.png");
-	for(int i = 0; i < numBarriers; i++)
-	{
-		Entity* barrier = new Entity(game, "Barrier" + to_string(i + 1));
-		barrier->AddComponent(new BarrierComponent(game, barrier, 100));
-		sf::Sprite* barrierSprite = barrier->GetSprite();
-		barrierSprite->setTexture(*barrierTexture);
-		//barrierSprite->setTextureRect(sf::IntRect(0, 0, barrierSprite->getGlobalBounds().width, barrierSprite->getGlobalBounds().height));
-		barrier->SetPosition(marginX + (barrierTexture->getSize().x + barrierGap * i), game->GetWindowHeight() - 200);
-
-		SoundComponent* barrierSoundComponent = (SoundComponent*)barrier->AddComponent(new SoundComponent(game, barrier));
-		barrierSoundComponent->AddSound("Sounds/BarrierHit.wav");
-		AddEntity(barrier);
-	}
+	SpawnBarriers();
 
 	//Add Sweeper
 	Entity* sweeper = new Entity(game, "Sweeper");
@@ -240,38 +225,124 @@ void Level::HandlePostUpdate(Object * sender, const EventDataMap & eventData)
 		Entity* entity = entityEntry.second;
 		entity->SetCheckedForCollisions(false);
 	}
+
+	if(spawnNewHorde)
+	{
+		spawnNewHorde = false;
+		SpawnHorde();
+		SpawnBarriers();
+	}
 }
 
 void Level::HandleDroneDestroyed(Object * sender, const EventDataMap & eventData)
 {
-	game->GetPlayerState()->score += 10;
+	DroneType droneType = (DroneType)eventData.at("DroneType").GetInt();
+	int scoreIncrease = 10;
+	switch(droneType)
+	{
+	case DroneType::MK1: scoreIncrease = 10; break;
+	case DroneType::MK2: scoreIncrease = 20; break;
+	case DroneType::MK3: scoreIncrease = 30; break;
+	};
+
+	game->GetPlayerState()->score += scoreIncrease;
 	scoreText.setString("Score : " + to_string(game->GetPlayerState()->score));
 	scoreText.setPosition((game->GetWindowWidth() / 2) - (scoreText.getLocalBounds().width / 2.f), 10.f);
 	dronesLeft--;
 	Log::Message("Drones left : %d", dronesLeft);
 
+	Entity* drone = static_cast<Entity*>(sender);
+	int index = -1;
+	for(int i = 0; i < drones.size(); i++)
+	{
+		if(drones[i] == drone)
+		{
+			index = i;
+			break;
+		}
+	}
+
+	if(index != -1)
+	{
+		drones.erase(drones.begin() + index);
+	}
+
 	if(dronesLeft == 0)
 	{
 		// Level cleared, spawn new, more difficult horde
 		hordeNum++;
-		SpawnHorde();
+		spawnNewHorde = true;
+
+		// Remove existing barriers, if any
+		for(Entity* existingBarrier : barriers)
+		{
+			if(existingBarrier)
+				RemoveEntity(existingBarrier);
+		}
+		barriers.clear();
 		//game->SetCurrentState(Game::State::GameOver);
 	}
 }
 
 void Level::SpawnHorde()
 {
+	drones.clear();
+
 	// Add Drones
 	sf::Texture* droneTexture = game->GetResourceManager()->GetTexture("Textures/drone.png");
 	dronesLeft = 0;
+
 	int numRows = 5, numColumns = 18;
+	int numMK1 = 0, numMK2 = 0, numMK3 = 0;
+	int totalDrones = numRows * numColumns;
+
+	if(hordeNum == 1)
+	{
+		numMK1 = (float)totalDrones * 1.f;
+	}
+	else if(hordeNum > 1 && hordeNum < 3)
+	{
+		numMK1 = (float)totalDrones * 0.3f;
+		numMK2 = (float)totalDrones * 0.5f;
+		numMK3 = (float)totalDrones * 0.2f;
+	}
+	else if(hordeNum >= 3 && hordeNum < 5)
+	{
+		numMK1 = (float)totalDrones * 0.2f;
+		numMK2 = (float)totalDrones * 0.3f;
+		numMK3 = (float)totalDrones * 0.5f;
+	}
+	else
+	{
+		numMK3 = (float)totalDrones * 1.f;
+	}
+
+
 	float gapX = 20, gapY = 60.f;
 	for(int i = 0; i < numRows; i++)
 	{
 		for(int j = 0; j < numColumns; j++)
 		{
+			//Determine what the type of drone should be
+			DroneType droneType = DroneType::MK1;
+			if(numMK1 != 0)
+			{
+				droneType = DroneType::MK1;
+				numMK1--;
+			}
+			else if(numMK2 != 0)
+			{
+				droneType = DroneType::MK2;
+				numMK2--;
+			}
+			else
+			{
+				droneType = DroneType::MK3;
+				numMK3;
+			}
+
 			Entity* drone = new Entity(game, "Drone" + to_string(dronesLeft + 1));
-			drone->AddComponent(new DroneComponent(game, drone));
+			drone->AddComponent(new DroneComponent(game, drone, droneType));
 			sf::Sprite* droneSprite = drone->GetSprite();
 			droneSprite->setTexture(*droneTexture);
 			drone->SetPosition((marginX * 2.5f) + (droneTexture->getSize().x * j) + (j * gapX), marginY + (i * gapY));
@@ -281,7 +352,31 @@ void Level::SpawnHorde()
 			droneSoundComponent->AddSound("Sounds/DroneHit.wav");
 
 			AddEntity(drone);
+			drones.push_back(drone);
 			dronesLeft++;
 		}
+	}
+	Log::Message("%d Drones spawned in Horde", dronesLeft);
+	Log::Message("%d Drones Length", drones.size());
+}
+
+void Level::SpawnBarriers()
+{
+	// Spawn new barriers
+	int numBarriers = 5;
+	float barrierGap = 150.f;
+	sf::Texture* barrierTexture = game->GetResourceManager()->GetTexture("Textures/barrier.png");
+	for(int i = 0; i < numBarriers; i++)
+	{
+		Entity* barrier = new Entity(game, "Barrier" + to_string(i + 1));
+		barrier->AddComponent(new BarrierComponent(game, barrier, 100));
+		sf::Sprite* barrierSprite = barrier->GetSprite();
+		barrierSprite->setTexture(*barrierTexture);
+		barrier->SetPosition(marginX + (barrierTexture->getSize().x + barrierGap * i), game->GetWindowHeight() - 200);
+
+		SoundComponent* barrierSoundComponent = (SoundComponent*)barrier->AddComponent(new SoundComponent(game, barrier));
+		barrierSoundComponent->AddSound("Sounds/BarrierHit.wav");
+		AddEntity(barrier);
+		barriers.push_back(barrier);
 	}
 }
