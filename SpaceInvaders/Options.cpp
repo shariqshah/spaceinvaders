@@ -70,7 +70,7 @@ Options::Options(Game* game) : GameState(game)
 		optionTypeTexts.push_back(keyShootText);
 
 		instructionText.setFont(*font);
-		instructionText.setString("Use up and down arrows to move selection, \nenter to change selection and backspace to go back to main menu.");
+		instructionText.setString("Use up and down arrows to move selection, Enter to change \nselection and Backspace to go back to main menu.");
 		instructionText.setCharacterSize(25);
 		instructionText.setPosition((game->GetWindowWidth() / 2) - (instructionText.getLocalBounds().width / 2.f), 480.f);
 	}

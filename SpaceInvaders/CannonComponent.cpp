@@ -108,7 +108,7 @@ void CannonComponent::HandleCollision(Object * sender, const EventDataMap & even
 		// We're hit by a bomb, reduce life and check if it's game over
 		game->GetPlayerState()->lives--;
 		game->GetLevel()->UpdatePlayerStatsText();
-		if(game->GetPlayerState()->lives == 0)
+		if(game->GetPlayerState()->lives <= 0)
 		{
 			game->SetCurrentState(Game::State::GameOver);
 		}

@@ -38,6 +38,9 @@ Level::Level(Game* game)
 			music->play();
 	}
 
+	//Reset player state
+	game->ResetPlayerState();
+
 	SubscribeToEvent(EventType::PostUpdate, this, &Level::HandlePostUpdate);
 	SubscribeToEvent(EventType::DroneDestroyed, this, &Level::HandleDroneDestroyed);
 }
@@ -96,6 +99,20 @@ void Level::Update(float deltaTime)
 		}
 		entity->SetCheckedForCollisions(true);
 	}
+
+	// FIXME: Dev-hack, only to test new high score state quickly, REMOVE THIS!
+	/*if(sf::Keyboard::isKeyPressed(sf::Keyboard::F12))
+	{
+		int newHighScore = 100;
+		auto highScores = game->GetHighScores();
+		if(highScores.size() > 0)
+		{
+			newHighScore = highScores[1].score + 100;
+		}
+		game->GetPlayerState()->score = newHighScore;
+		game->AddCurrentPlayerHighscore();
+		game->SetCurrentState(Game::State::NewHighScore);
+	}*/
 }
 
 void Level::Draw()

@@ -19,5 +19,6 @@ enum class EventType
 	LevelEnd,        // Params: None
 	Collision,       // Params: Other : Entity*
 	DroneDestroyed,  // Params: DroneType : DroneType
+	TextEntered,     // Params: Text : uint32_t
 	Len
 };

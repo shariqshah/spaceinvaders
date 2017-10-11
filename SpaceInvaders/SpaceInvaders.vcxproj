@@ -179,6 +179,7 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MainMenu.cpp" />
     <ClCompile Include="MissileComponent.cpp" />
+    <ClCompile Include="NewHighScore.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="Options.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
@@ -204,6 +205,7 @@
     <ClInclude Include="Log.h" />
     <ClInclude Include="MainMenu.h" />
     <ClInclude Include="MissileComponent.h" />
+    <ClInclude Include="NewHighScore.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="Options.h" />
     <ClInclude Include="ResourceManager.h" />

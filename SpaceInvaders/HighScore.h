@@ -4,12 +4,12 @@
 
 #include <SFML\Graphics.hpp>
 
-class HighScore : public GameState
+class HighScores : public GameState
 {
 public:
-	HighScore() {};
-	HighScore(Game* game);
-	virtual ~HighScore();
+	HighScores() {};
+	HighScores(Game* game);
+	virtual ~HighScores();
 
 	virtual void Update(float deltaTime) override;
 	virtual void Draw() override;
@@ -17,6 +17,7 @@ public:
 private:
 	sf::Text titleText;
 	sf::Text instructionText;
+	std::vector<sf::Text> scoreTexts;
 
 	void HandleKeyDown(Object* sender, const EventDataMap& eventData);
 };

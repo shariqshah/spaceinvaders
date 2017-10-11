@@ -3,8 +3,9 @@
 #include "ResourceManager.h"
 #include "Log.h"
 
+using namespace std;
 
-HighScore::HighScore(Game* game) : GameState(game)
+HighScores::HighScores(Game* game) : GameState(game)
 {
 	ResourceManager* resourceManager = game->GetResourceManager();
 	sf::Font* font = resourceManager->GetFont("Fonts/ARCADE.ttf");
@@ -16,39 +17,57 @@ HighScore::HighScore(Game* game) : GameState(game)
 		titleText.setPosition((game->GetWindowWidth()  / 2.f) - (titleText.getGlobalBounds().width / 2.f), 80.f);
 
 		instructionText.setFont(*font);
-		instructionText.setString("Press Enter to go back to main menu...");
-		instructionText.setCharacterSize(30);
-		instructionText.setPosition((game->GetWindowWidth()  / 2.f) - (instructionText.getGlobalBounds().width / 2.f), (game->GetWindowHeight() / 2.f) + 60);
+		instructionText.setString("Press Escape or Backspace to go back to main menu...");
+		instructionText.setCharacterSize(20);
+		instructionText.setPosition((game->GetWindowWidth()  / 2.f) - (instructionText.getGlobalBounds().width / 2.f), 500);
+
+		int yPos = 180;
+		int offset = 40;
+		vector<Game::HighScore>& highScores = game->GetHighScores();
+		for(Game::HighScore& highScore : highScores)
+		{
+			sf::Text scoreText;
+			scoreText.setFont(*font);
+			scoreText.setString(highScore.playerName + "              " + to_string(highScore.score));
+			scoreText.setCharacterSize(30);
+			scoreText.setPosition((game->GetWindowWidth()  / 2.f) - (scoreText.getGlobalBounds().width / 2.f), yPos);
+			scoreTexts.push_back(scoreText);
+			yPos += offset;
+		}
 	}
 
-	SubscribeToEvent(EventType::KeyDown, this, &HighScore::HandleKeyDown);
+	SubscribeToEvent(EventType::KeyDown, this, &HighScores::HandleKeyDown);
 }
 
 
-HighScore::~HighScore()
+HighScores::~HighScores()
 {
 	UnsubscribeFromEvent(EventType::KeyDown, this);
 }
 
-void HighScore::Update(float deltaTime)
+void HighScores::Update(float deltaTime)
 {
 }
 
-void HighScore::Draw()
+void HighScores::Draw()
 {
 	sf::RenderWindow* window = game->GetWindow();
 
 	window->clear(sf::Color::Black);
 	window->draw(titleText);
+
+	for(sf::Text& scoreText : scoreTexts)
+		window->draw(scoreText);
+
 	window->draw(instructionText);
 }
 
-void HighScore::HandleKeyDown(Object * sender, const EventDataMap & eventData)
+void HighScores::HandleKeyDown(Object * sender, const EventDataMap & eventData)
 {
 	using sf::Keyboard;
 	Keyboard::Key key = (Keyboard::Key)eventData.at("Key").GetInt();
 	
-	if(key == Keyboard::Return)
+	if(key == Keyboard::Escape || key == Keyboard::BackSpace)
 	{
 		game->SetCurrentState(Game::State::MainMenu);
 	}

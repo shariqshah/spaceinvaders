@@ -3,6 +3,7 @@
 #include "MainMenu.h"
 #include "Options.h"
 #include "HighScore.h"
+#include "NewHighScore.h"
 #include "Level.h"
 #include "GameOver.h"
 #include "ResourceManager.h"
@@ -13,6 +14,7 @@
 #include <SFML\Graphics.hpp>
 #include <stdlib.h>
 #include <time.h>
+#include <algorithm>
 
 using namespace std;
 
@@ -87,6 +89,15 @@ void Game::Run()
 				eventData.insert(pair<string, Variant>("Shift", Variant(event.key.shift)));
 				eventManager->SendEvent(EventType::KeyUp, this, eventData);
 			}
+			else if(event.type == sf::Event::TextEntered)
+			{
+				if(event.text.unicode < 128) // We're only handling ascii characters here
+				{
+					auto eventData = eventManager->GetEventDataMap();
+					eventData.insert(pair<string, Variant>("Text", Variant((uint32_t)event.text.unicode)));
+					eventManager->SendEvent(EventType::TextEntered, this, eventData);
+				}
+			}
 		}
 
 		float currentTime = (float)clock.getElapsedTime().asSeconds();
@@ -145,7 +156,7 @@ void Game::SetRequestedState()
 	case State::HighScore:
 	{
 		levelStarted = false;
-		gameStates[(int)Game::State::HighScore] = new HighScore(this);
+		gameStates[(int)Game::State::HighScore] = new HighScores(this);
 	}
 	break;
 	case State::GameOver:
@@ -162,6 +173,11 @@ void Game::SetRequestedState()
 	case State::Options:
 	{
 		gameStates[(int)Game::State::Options] = new Options(this);
+	}
+	break;
+	case State::NewHighScore:
+	{
+		gameStates[(int)Game::State::NewHighScore] = new NewHighScore(this);
 	}
 	break;
 	};
@@ -189,12 +205,27 @@ void Game::SetCurrentState(State newState)
 		window->close();
 		return;
 	}
+	else if(newState == State::GameOver && currentState != State::NewHighScore) // Check if the current score is a new highscore, if it is, then go to new high score screen
+	{
+		int minScore = 0;
+		if(highScores.size() > 0) minScore = highScores[0].score;
 
-	//if(gameStates[(int)currentState])
-	//{
-	//	delete gameStates[(int)currentState];
-	//	gameStates[(int)currentState] = NULL;
-	//}
+		for(HighScore& highScore : highScores)
+		{
+			if(highScore.score < minScore)
+				minScore = highScore.score;
+		}
+
+		if(playerState.score > minScore)
+		{
+			if(highScores.size() >= MAX_HIGHSCORES)
+			{
+				highScores.pop_back();
+			}
+			newState = State::NewHighScore;
+		}
+	}
+
 	requestedState = newState;
 }
 
@@ -211,4 +242,27 @@ int Game::GetWindowHeight()
 Level * Game::GetLevel()
 {
 	return static_cast<Level*>(gameStates[(int)State::Level]);
+}
+
+void Game::AddCurrentPlayerHighscore()
+{
+	HighScore score;
+	score.playerName = playerState.name;
+	score.score = playerState.score;
+	highScores.push_back(score);
+
+	// Sort the highscores by highest score
+	if(highScores.size() > 1)
+	{
+		sort(highScores.begin(), highScores.end(), [](HighScore& a, HighScore&b)
+		{
+			return b.score < a.score;
+		});
+	}
+}
+
+void Game::ResetPlayerState()
+{
+	playerState.score = 0;
+	playerState.lives = STARTING_PLAYER_LIVES;
 }

@@ -15,13 +15,15 @@ namespace sf
 	class RenderWindow;
 }
 
-#define STARTING_PLAYER_LIVES 30
+#define STARTING_PLAYER_LIVES 1
+#define MAX_HIGHSCORES 10
 
 class Game : public Object
 {
 public:
 	struct PlayerState
 	{
+		std::string name = "DEFAULT PLAYER";
 		int score = 0;
 		int lives = STARTING_PLAYER_LIVES;
 	};
@@ -35,12 +37,19 @@ public:
 		sf::Keyboard::Key shoot = sf::Keyboard::Space;
 	};
 
+	struct HighScore
+	{
+		std::string playerName = "DEFAULT PLAYER";
+		int score = 999999;
+	};
+
 	enum class State
 	{
 		MainMenu = 0,
 		Level,
 		Options,
 		GameOver,
+		NewHighScore,
 		HighScore,
 		Quit,
 		Len
@@ -62,6 +71,9 @@ public:
 	Level* GetLevel();
 	PlayerState* GetPlayerState() { return &playerState; }
 	Settings* GetSettings() { return &settings; }
+	std::vector<HighScore>& GetHighScores() { return highScores; };
+	void AddCurrentPlayerHighscore(); // Add current player's score as highscore
+	void ResetPlayerState();
 
 private:
 	std::vector<GameState*> gameStates;
@@ -69,6 +81,8 @@ private:
 	ResourceManager* resourceManager;
 	EventManager* eventManager;
 	Settings settings;
+
+	std::vector<HighScore> highScores;
 
 	State currentState;
 	State requestedState;

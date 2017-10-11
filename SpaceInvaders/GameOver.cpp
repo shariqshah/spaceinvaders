@@ -71,9 +71,8 @@ void GameOver::HandleKeyDown(Object * sender, const EventDataMap & eventData)
 {
 	using sf::Keyboard;
 	Keyboard::Key key = (Keyboard::Key)eventData.at("Key").GetInt();
-	Game::PlayerState* playerState = game->GetPlayerState();
-	playerState->score = 0;
-	playerState->lives = STARTING_PLAYER_LIVES;
+	
+	game->ResetPlayerState();
 	if(key == Keyboard::Return)
 	{
 		game->SetCurrentState(Game::State::MainMenu);

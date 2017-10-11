@@ -11,6 +11,7 @@ Variant::Variant(const Variant & other)
 	switch(type)
 	{
 	case VariantType::Int:     data.intVal     = other.GetInt();     break;
+	case VariantType::Uint:    data.uintVal    = other.GetUint();    break;
 	case VariantType::Double:  data.doubleVal  = other.GetDouble();  break;
 	case VariantType::Float:   data.floatVal   = other.GetFloat();   break;
 	case VariantType::String:  data.stringVal  = other.GetString();  break;
@@ -23,6 +24,12 @@ Variant::Variant(int value)
 {
 	type = VariantType::Int;
 	data.intVal = value;
+}
+
+Variant::Variant(uint32_t value)
+{
+	data.uintVal = value;
+	type = VariantType::Uint;
 }
 
 Variant::Variant(float value)
@@ -68,6 +75,14 @@ int Variant::GetInt() const
 {
 	if(type == VariantType::Int)
 		return data.intVal;
+	else
+		return 0;
+}
+
+uint32_t Variant::GetUint() const
+{
+	if(type == VariantType::Uint)
+		return data.uintVal;
 	else
 		return 0;
 }
