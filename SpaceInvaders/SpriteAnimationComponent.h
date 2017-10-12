@@ -2,8 +2,6 @@
 
 #include "Component.h"
 
-#include <SFML\System.hpp>
-
 /*
 
 Animation Component that uses the sprite contained in the Entity as the basis for animation
@@ -26,7 +24,7 @@ public:
 	};
 
 	SpriteAnimationComponent() {};
-	SpriteAnimationComponent(Game* game, Entity* entity, int frames, float speed = 1.f, bool looped = true);
+	SpriteAnimationComponent(Game* game, Entity* entity, int frames, float speed = 1.f, bool autoplay = true, bool looped = true);
 	virtual ~SpriteAnimationComponent();
 
 	virtual ComponentType GetType() override { return ComponentType::SpriteAnimation; };
@@ -36,6 +34,7 @@ public:
 	void Pause();
 	void SetLoop(bool loop);
 	State GetState() const { return currentState; }
+	void MoveToNextFrame();
 private:
 	void HandleUpdate(Object* sender, const EventDataMap& eventData);
 
@@ -43,11 +42,10 @@ private:
 	int frameHeight = 0.f;
 	int frameWidth= 0.f;
 	int numFrames = 1;
-	int currentFrame = 0;
+	int currentFrame = 1;
 	float timeElapsed = 0.f;
 	float animationSpeed = 1.f;
 	float interval = 0.f;
 	bool looped = true;
-	sf::Clock clock;
 };
 

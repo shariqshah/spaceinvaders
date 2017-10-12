@@ -1,4 +1,5 @@
 #include "BarrierComponent.h"
+#include "SpriteAnimationComponent.h"
 #include "Game.h"
 #include "ResourceManager.h"
 #include "SoundComponent.h"
@@ -25,7 +26,7 @@ void BarrierComponent::HandleCollision(Object * sender, const EventDataMap & eve
 		// Reduce health on hit
 		health -= onHitDamage;
 
-		SoundComponent* soundComponent = entity->GetComponent<SoundComponent>();
+		SoundComponent* soundComponent = (SoundComponent*)entity->GetComponent(ComponentType::Sound);
 		if(soundComponent)
 		{
 			Game::Settings* settings = game->GetSettings();
@@ -54,6 +55,14 @@ void BarrierComponent::HandleCollision(Object * sender, const EventDataMap & eve
 			}
 
 			level->RemoveEntity(entity);
+		}
+		else
+		{
+			//Move animation one frame forward to show barrier is damaged
+			if(health == 60 || health == 40 || health == 20)
+			{
+				SpriteAnimationComponent* animation = (SpriteAnimationComponent*)entity->GetComponent(ComponentType::SpriteAnimation);
+				animation->MoveToNextFrame();
 		}
 	}
 }

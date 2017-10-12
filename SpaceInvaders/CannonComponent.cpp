@@ -80,7 +80,7 @@ void CannonComponent::HandleKeyDown(Object * sender, const EventDataMap& eventDa
 		Level* level = game->GetLevel();
 		level->AddEntity(missile);
 
-		SoundComponent* soundComponent = entity->GetComponent<SoundComponent>();
+		SoundComponent* soundComponent = (SoundComponent*)entity->GetComponent(ComponentType::Sound);
 		if(soundComponent)
 		{
 			if(settings->soundOn)
@@ -112,7 +112,7 @@ void CannonComponent::HandleCollision(Object * sender, const EventDataMap & even
 			game->SetCurrentState(Game::State::GameOver);
 		}
 
-		SoundComponent* soundComponent = entity->GetComponent<SoundComponent>();
+		SoundComponent* soundComponent = (SoundComponent*)entity->GetComponent(ComponentType::Sound);
 		if(soundComponent)
 		{
 			Game::Settings* settings = game->GetSettings();

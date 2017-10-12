@@ -28,7 +28,7 @@ void SweeperComponent::HandleUpdate(Object * sender, const EventDataMap & eventD
 		active = true;
 		Level* level = game->GetLevel();
 		entity->SetPosition(game->GetWindowWidth() - level->GetMarginX(), level->GetMarginY());
-		SoundComponent* soundComponent = entity->GetComponent<SoundComponent>();
+		SoundComponent* soundComponent = (SoundComponent*)entity->GetComponent(ComponentType::Sound);
 		if(soundComponent)
 		{
 			if(game->GetSettings()->soundOn)
@@ -50,7 +50,7 @@ void SweeperComponent::HandleUpdate(Object * sender, const EventDataMap & eventD
 		{
 			active = false;
 			clock.restart();
-			SoundComponent* soundComponent = entity->GetComponent<SoundComponent>();
+			SoundComponent* soundComponent = (SoundComponent*)entity->GetComponent(ComponentType::Sound);
 			if(soundComponent)
 			{
 				soundComponent->Stop("Sounds/SweeperMove.wav");
@@ -70,7 +70,7 @@ void SweeperComponent::HandleCollision(Object * sender, const EventDataMap & eve
 		game->GetPlayerState()->score += hitScoreReward;
 		game->GetPlayerState()->lives += hitLifeReward;
 
-		SoundComponent* soundComponent = entity->GetComponent<SoundComponent>();
+		SoundComponent* soundComponent = (SoundComponent*)entity->GetComponent(ComponentType::Sound);
 		if(soundComponent)
 		{
 			if(game->GetSettings()->soundOn)

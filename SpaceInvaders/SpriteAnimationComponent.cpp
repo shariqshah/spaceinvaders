@@ -2,7 +2,7 @@
 #include "Entity.h"
 #include "Game.h"
 
-SpriteAnimationComponent::SpriteAnimationComponent(Game * game, Entity * entity, int frames, float speed, bool loop) : 
+SpriteAnimationComponent::SpriteAnimationComponent(Game * game, Entity * entity, int frames, float speed, bool autoplay, bool loop) : 
 	Component(game, entity), 
 	numFrames(frames),
 	animationSpeed(speed),
@@ -19,7 +19,11 @@ SpriteAnimationComponent::SpriteAnimationComponent(Game * game, Entity * entity,
 	interval = 1.f / (float)numFrames; 
 
 	//Set the sprite's rect to the first frame
+	currentFrame = 1;
 	sprite->setTextureRect(sf::IntRect(0, 0, currentFrame * frameWidth, frameHeight));
+
+	if(!autoplay)
+		currentState = Stopped;
 
 	SubscribeToEvent(EventType::Update, this, &SpriteAnimationComponent::HandleUpdate);
 }
@@ -53,29 +57,34 @@ void SpriteAnimationComponent::SetLoop(bool loop)
 	looped = loop;
 }
 
-void SpriteAnimationComponent::HandleUpdate(Object* sender, const EventDataMap & eventData)
+void SpriteAnimationComponent::MoveToNextFrame()
 {
 	sf::Sprite* sprite = entity->GetSprite();
+	currentFrame++;
+	if(currentFrame > numFrames)
+	{
+		if(!looped)
+		{
+			Stop();
+			return;
+		}
+		else
+		{
+			currentFrame = 1;
+		}
+	}
+	sprite->setTextureRect(sf::IntRect((currentFrame - 1) * frameWidth, 0, frameWidth, frameHeight));
+}
+
+void SpriteAnimationComponent::HandleUpdate(Object* sender, const EventDataMap & eventData)
+{
 	if(currentState == Playing)
 	{
 		timeElapsed += (game->GetDeltaTime() * animationSpeed);
 		if(timeElapsed >= interval)
 		{
 			timeElapsed = 0.f;
-			currentFrame++;
-			if(currentFrame > numFrames)
-			{
-				if(!looped)
-				{
-					Stop();
-					return;
-				}
-				else
-				{
-					currentFrame = 1;
-				}
-			}
-			sprite->setTextureRect(sf::IntRect((currentFrame - 1) * frameWidth, 0, frameWidth, frameHeight));
+			MoveToNextFrame();
 		}
 	}
 }

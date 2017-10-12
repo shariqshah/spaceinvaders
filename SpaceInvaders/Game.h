@@ -15,9 +15,11 @@ namespace sf
 	class RenderWindow;
 }
 
-#define STARTING_PLAYER_LIVES 1
+#define STARTING_PLAYER_LIVES 5
 #define MAX_HIGHSCORES 10
 
+// Central hub of the Game. All game related settings, player state, current game state, current level etc 
+// are stored here and need to be accessed from here if needed
 class Game : public Object
 {
 public:

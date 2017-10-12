@@ -198,8 +198,9 @@ void Level::Initialize()
 	SoundComponent* sweeperSoundComponent = (SoundComponent*)sweeper->AddComponent(new SoundComponent(game, sweeper));
 	sweeperSoundComponent->AddSound("Sounds/SweeperMove.wav");
 	sweeperSoundComponent->SetLooped("Sounds/SweeperSound.wav", true);
-
 	sweeperSoundComponent->AddSound("Sounds/SweeperHit.wav");
+
+	sweeper->AddComponent(new SpriteAnimationComponent(game, sweeper, 4, 3.f));
 
 	AddEntity(sweeper);
 
@@ -337,7 +338,7 @@ void Level::SpawnHorde()
 	}
 
 
-	float gapX = 48, gapY = 60.f;
+	float gapX = 28, gapY = 60.f;
 	for(int i = 0; i < numRows; i++)
 	{
 		for(int j = 0; j < numColumns; j++)
@@ -385,7 +386,7 @@ void Level::SpawnBarriers()
 {
 	// Spawn new barriers
 	int numBarriers = 5;
-	float barrierGap = 150.f;
+	float barrierGap = 100.f;
 	sf::Texture* barrierTexture = game->GetResourceManager()->GetTexture("Textures/barrier.png");
 	for(int i = 0; i < numBarriers; i++)
 	{
@@ -393,7 +394,8 @@ void Level::SpawnBarriers()
 		barrier->AddComponent(new BarrierComponent(game, barrier, 100));
 		sf::Sprite* barrierSprite = barrier->GetSprite();
 		barrierSprite->setTexture(*barrierTexture);
-		barrier->SetPosition(marginX + (barrierTexture->getSize().x + barrierGap * i), game->GetWindowHeight() - 200);
+		barrier->AddComponent(new SpriteAnimationComponent(game, barrier, 4, 1.f, false));
+		barrier->SetPosition((marginX * 2.f) + (barrierSprite->getTextureRect().width * i) + (barrierGap * i), game->GetWindowHeight() - 200);
 
 		SoundComponent* barrierSoundComponent = (SoundComponent*)barrier->AddComponent(new SoundComponent(game, barrier));
 		barrierSoundComponent->AddSound("Sounds/BarrierHit.wav");

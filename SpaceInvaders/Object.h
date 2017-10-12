@@ -16,6 +16,9 @@
 
 class Game;
 
+
+// Base object class. Any object that needs to send or recieve needs to inherit from
+// Object
 class Object
 {
 public:

@@ -23,7 +23,7 @@ NewHighScore::NewHighScore(Game* game) : GameState(game)
 		nameText.setPosition((game->GetWindowWidth() / 2) - (nameText.getLocalBounds().width / 2.f), 150.f);
 
 		instructionText.setFont(*font);
-		instructionText.setString("Write your name and press Enter to continue");
+		instructionText.setString("Enter your name, press Backspace to erase and press Enter to continue");
 		instructionText.setCharacterSize(20);
 		instructionText.setPosition((game->GetWindowWidth() / 2) - (instructionText.getLocalBounds().width / 2.f), 300.f);
 	}
@@ -68,16 +68,6 @@ void NewHighScore::HandleKeyDown(Object * sender, const EventDataMap & eventData
 		game->AddCurrentPlayerHighscore();
 		game->SetCurrentState(Game::State::GameOver);
 	}
-	else if(key == Keyboard::BackSpace)
-	{
-		if(enteredText.getSize() > 0)
-		{
-			//enteredText = enteredText.substring(0, enteredText.getSize()- 1);
-			enteredText.erase(enteredText.getSize() - 1);
-			nameText.setString("Your Name : " + enteredText);
-		}
-		
-	}
 }
 
 void NewHighScore::HandleTextEntered(Object * sender, const EventDataMap & eventData)
@@ -85,6 +75,16 @@ void NewHighScore::HandleTextEntered(Object * sender, const EventDataMap & event
 	uint32_t character = eventData.at("Text").GetUint();
 
 	//enteredText += character;
-	enteredText.insert(enteredText.getSize(), character);
+	if((char)character == '\b') // If backspace then remove the last entered character
+	{
+		if(enteredText.getSize() > 0)
+			enteredText.erase(enteredText.getSize() - 1, 1);
+	}
+	else
+	{
+		if(sf::Keyboard::isKeyPressed(sf::Keyboard::Return)) // Ignore nextline characters
+			return;
+		enteredText.insert(enteredText.getSize(), character);
+	}
 	nameText.setString("Your Name : " + enteredText);
 }

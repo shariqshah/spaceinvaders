@@ -23,8 +23,10 @@ public:
 	bool HasComponent(ComponentType type);
 	bool RemoveComponent(ComponentType type);
 	std::vector<Component*>& GetComponents() { return components; };
+	Component* GetComponent(ComponentType type);
 
-	template<class T>
+
+	/*template<class T>
 	T* GetComponent() 
 	{
 		T temp;
@@ -36,7 +38,7 @@ public:
 			}
 		}
 		return NULL;
-	}
+	}*/
 
 	//Convenience methods for entity transformation
 	void SetPosition(float x, float y) { sprite.setPosition(x, y); };

@@ -101,3 +101,15 @@ bool Entity::RemoveComponent(ComponentType type)
 	Log::Message("Component '%s' removed from '%s'", Common::ComponentTypeToString(type).c_str(), name.c_str());
 	return true;
 }
+
+Component * Entity::GetComponent(ComponentType type)
+{
+	for(Component* component : components)
+	{
+		if(component->GetType() == type)
+		{
+			return component;
+		}
+	}
+	return NULL;
+}

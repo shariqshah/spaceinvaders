@@ -76,7 +76,7 @@ void DroneComponent::HandleUpdate(Object * sender, const EventDataMap& eventData
 		
 		clock.restart();
 
-		SoundComponent* soundComponent = entity->GetComponent<SoundComponent>();
+		SoundComponent* soundComponent = (SoundComponent*)entity->GetComponent(ComponentType::Sound);
 		if(soundComponent)
 		{
 			Game::Settings* settings = game->GetSettings();
@@ -96,7 +96,7 @@ void DroneComponent::HandleCollision(Object * sender, const EventDataMap& eventD
 	Entity* other = (Entity*)eventData.at("Other").GetVoidPtr();
 	if(other->HasComponent(ComponentType::Missile))
 	{
-		SoundComponent* soundComponent = entity->GetComponent<SoundComponent>();
+		SoundComponent* soundComponent = (SoundComponent*)entity->GetComponent(ComponentType::Sound);
 		if(soundComponent)
 		{
 			Game::Settings* settings = game->GetSettings();
