@@ -16,6 +16,7 @@ enum class ComponentType
 	Sound,
 	Music,
 	Sweeper,
+	SpriteAnimation,
 	Len
 };
 

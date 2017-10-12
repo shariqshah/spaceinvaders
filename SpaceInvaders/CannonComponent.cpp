@@ -74,8 +74,7 @@ void CannonComponent::HandleKeyDown(Object * sender, const EventDataMap& eventDa
 		missileSprite->setTexture(*missileTexture);
 
 		sf::Vector2f currPos = entity->GetPosition();
-		const sf::Texture* droneTex = entity->GetSprite()->getTexture();
-		float halfTextureWidth = droneTex->getSize().x / 4.f;
+		float halfTextureWidth = entity->GetSprite()->getTextureRect().width / 2.f;
 		missile->SetPosition(currPos.x + halfTextureWidth, entity->GetPositionY());
 
 		Level* level = game->GetLevel();

@@ -6,6 +6,7 @@
 #include "SoundComponent.h"
 #include "BarrierComponent.h"
 #include "SweeperComponent.h"
+#include "SpriteAnimationComponent.h"
 #include "ResourceManager.h"
 #include "Log.h"
 
@@ -164,6 +165,7 @@ void Level::Initialize()
 	sf::Sprite* playerSprite = player->GetSprite();
 	playerSprite->setTexture(*texture);
 	player->SetPosition(game->GetWindowWidth() / 2, game->GetWindowHeight() - 150);
+	player->AddComponent(new SpriteAnimationComponent(game, player, 4));
 
 	SoundComponent* soundComponent = (SoundComponent*)player->AddComponent(new SoundComponent(game, player));
 	soundComponent->AddSound("Sounds/CannonShoot.wav");
@@ -309,7 +311,7 @@ void Level::SpawnHorde()
 	sf::Texture* droneTexture = game->GetResourceManager()->GetTexture("Textures/drone.png");
 	dronesLeft = 0;
 
-	int numRows = 5, numColumns = 18;
+	int numRows = 5, numColumns = 15;
 	int numMK1 = 0, numMK2 = 0, numMK3 = 0;
 	int totalDrones = numRows * numColumns;
 
@@ -335,7 +337,7 @@ void Level::SpawnHorde()
 	}
 
 
-	float gapX = 20, gapY = 60.f;
+	float gapX = 48, gapY = 60.f;
 	for(int i = 0; i < numRows; i++)
 	{
 		for(int j = 0; j < numColumns; j++)
@@ -362,11 +364,13 @@ void Level::SpawnHorde()
 			drone->AddComponent(new DroneComponent(game, drone, droneType));
 			sf::Sprite* droneSprite = drone->GetSprite();
 			droneSprite->setTexture(*droneTexture);
-			drone->SetPosition((marginX * 2.5f) + (droneTexture->getSize().x * j) + (j * gapX), marginY + (i * gapY));
+			drone->AddComponent(new SpriteAnimationComponent(game, drone, 4, 2.f));
+			drone->SetPosition((marginX * 2.5f) + (droneSprite->getTextureRect().width * j) + (j * gapX), marginY + (i * gapY));
 
 			SoundComponent* droneSoundComponent = (SoundComponent*)drone->AddComponent(new SoundComponent(game, drone));
 			droneSoundComponent->AddSound("Sounds/DroneShoot.wav");
 			droneSoundComponent->AddSound("Sounds/DroneHit.wav");
+
 
 			AddEntity(drone);
 			drones.push_back(drone);

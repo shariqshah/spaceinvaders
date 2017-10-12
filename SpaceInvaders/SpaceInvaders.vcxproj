@@ -184,6 +184,7 @@
     <ClCompile Include="Options.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="SoundComponent.cpp" />
+    <ClCompile Include="SpriteAnimationComponent.cpp" />
     <ClCompile Include="SweeperComponent.cpp" />
     <ClCompile Include="Variant.cpp" />
   </ItemGroup>
@@ -210,6 +211,7 @@
     <ClInclude Include="Options.h" />
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="SoundComponent.h" />
+    <ClInclude Include="SpriteAnimationComponent.h" />
     <ClInclude Include="SweeperComponent.h" />
     <ClInclude Include="Variant.h" />
   </ItemGroup>
