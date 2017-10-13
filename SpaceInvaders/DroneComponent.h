@@ -11,6 +11,11 @@ enum class DroneType
 	MK3
 };
 
+/*
+Provides drone logic. Drones spawn a bomb after a random interval which
+is assigned on construction. The interval is between shootMinInterval and shootMaxInterval.
+Drones have different types. Other drone types have more health so they are harder to destroy
+*/
 class DroneComponent : public Component
 {
 public:
@@ -29,6 +34,7 @@ private:
 
 	sf::Clock clock;
 	const int shootIntervalMax = 30; // maximum number of seconds after which drone drops a bomb
+	const int shootIntervalMin = 10;
 	int shootInterval = 0;
 	int health = 10;
 	int onHitDamage = 10;

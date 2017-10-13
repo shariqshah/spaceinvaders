@@ -2,12 +2,14 @@
 
 #include "EventManager.h"
 
+/*Convenience macro that gets the event manager and subscribes to an event */
 #define SubscribeToEvent(type, instance, method) \
 {\
 	EventManager* manager = game->GetEventManager();\
 	manager->SubscribeEvent(type, instance, std::bind(method, instance, std::placeholders::_1, std::placeholders::_2)); \
 }\
 
+/*Convenience macro that gets the event manager and unsubscribes to an event */
 #define UnsubscribeFromEvent(type, subscriber) \
 {\
 	EventManager* manager = game->GetEventManager();\
@@ -17,8 +19,7 @@
 class Game;
 
 
-// Base object class. Any object that needs to send or recieve needs to inherit from
-// Object
+// Base object class. Any object that needs to send or recieve events needs to inherit from this class
 class Object
 {
 public:

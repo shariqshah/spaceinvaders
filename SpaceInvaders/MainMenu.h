@@ -7,6 +7,9 @@
 
 class Variant;
 
+/*
+Main menu state. First state that is shown when the game launches
+*/
 class MainMenu : public GameState
 {
 public:

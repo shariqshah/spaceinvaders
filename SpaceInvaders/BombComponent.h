@@ -2,6 +2,9 @@
 
 #include "Component.h"
 
+/*
+Provides bomb logic to an entity. Bombs only damage player and barriers
+*/
 class BombComponent : public Component
 {
 public:

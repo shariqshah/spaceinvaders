@@ -38,7 +38,7 @@ DroneComponent::DroneComponent(Game* game, Entity* entity, DroneType type) : Com
 	SubscribeToEvent(EventType::LevelStart, this, &DroneComponent::HandleLevelStart);
 	SubscribeToEvent(EventType::Collision, this, &DroneComponent::HandleCollision);
 
-	shootInterval = (rand() % shootIntervalMax) + 10;
+	shootInterval = (rand() % shootIntervalMax) + shootIntervalMin;
 }
 
 DroneComponent::~DroneComponent()

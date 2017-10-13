@@ -18,7 +18,7 @@ namespace sf
 #define STARTING_PLAYER_LIVES 5
 #define MAX_HIGHSCORES 10
 
-// Central hub of the Game. All game related settings, player state, current game state, current level etc 
+// Central hub of the Game. All game related settings, player state, sub-systems e.g. EventManager, Resource Manager etc, current game state, current level etc 
 // are stored here and need to be accessed from here if needed
 class Game : public Object
 {

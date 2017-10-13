@@ -4,6 +4,11 @@
 
 #include <SFML\Graphics.hpp>
 
+/*
+Shown when the player's score is greater than the current highscores. The are only ten 
+highscores shown at max. If a player scores greater than the current high scores the last 
+high score is discarded.
+*/
 class NewHighScore : public GameState
 {
 public:

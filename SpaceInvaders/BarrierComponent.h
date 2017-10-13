@@ -2,6 +2,10 @@
 
 #include "Component.h"
 
+/*
+Provides barrier logic when added to an entity, expects an entity to have an
+animation component which is used to represent the damage state of the barrier.
+*/
 class BarrierComponent : public Component
 {
 public:

@@ -100,20 +100,6 @@ void Level::Update(float deltaTime)
 		}
 		entity->SetCheckedForCollisions(true);
 	}
-
-	// FIXME: Dev-hack, only to test new high score state quickly, REMOVE THIS!
-	/*if(sf::Keyboard::isKeyPressed(sf::Keyboard::F12))
-	{
-		int newHighScore = 100;
-		auto highScores = game->GetHighScores();
-		if(highScores.size() > 0)
-		{
-			newHighScore = highScores[1].score + 100;
-		}
-		game->GetPlayerState()->score = newHighScore;
-		game->AddCurrentPlayerHighscore();
-		game->SetCurrentState(Game::State::NewHighScore);
-	}*/
 }
 
 void Level::Draw()
@@ -164,7 +150,7 @@ void Level::Initialize()
 	sf::Texture* texture = game->GetResourceManager()->GetTexture("Textures/cannon.png");
 	sf::Sprite* playerSprite = player->GetSprite();
 	playerSprite->setTexture(*texture);
-	player->SetPosition(game->GetWindowWidth() / 2, game->GetWindowHeight() - 150);
+	player->SetPosition(game->GetWindowWidth() / 2, game->GetWindowHeight() - 100);
 	player->AddComponent(new SpriteAnimationComponent(game, player, 4));
 
 	SoundComponent* soundComponent = (SoundComponent*)player->AddComponent(new SoundComponent(game, player));
@@ -177,12 +163,12 @@ void Level::Initialize()
 	//Add Ground
 	Entity* ground = new Entity(game, "Ground");
 	sf::RenderWindow* window = game->GetWindow();
-	ground->SetPosition(0.f, window->getSize().y - 50.f);
+	ground->SetPosition(0.f, window->getSize().y - 20.f);
 	sf::Sprite* groundSprite = ground->GetSprite();
-	sf::Texture* groundTexture = game->GetResourceManager()->GetTexture("Textures/cannon.png");
+	sf::Texture* groundTexture = game->GetResourceManager()->GetTexture("Textures/ground.png");
 	groundSprite->setTexture(*groundTexture);
 	groundTexture->setRepeated(true);
-	groundSprite->setTextureRect(sf::IntRect(0, 0, window->getSize().x, 64));
+	groundSprite->setTextureRect(sf::IntRect(0, 0, window->getSize().x, 32));
 	AddEntity(ground);
 
 	//Add Barriers

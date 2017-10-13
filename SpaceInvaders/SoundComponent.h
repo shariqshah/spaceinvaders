@@ -9,6 +9,9 @@ namespace sf
 	class Sound;
 }
 
+/*
+Contains sounds that can be played simulatneously. Multiple sounds can be added and then played by their name
+*/
 class SoundComponent : public Component
 {
 public:
@@ -20,7 +23,7 @@ public:
 
 	void AddSound(const std::string& name);
 	void Play(const std::string& name);
-	void PlayDefault();
+	void PlayDefault(); // Play the first sound in the sounds list. Used when we know there's only one sound
 	void Pause(const std::string& name); 
 	void Stop(const std::string& name);
 	void SetLooped(const std::string& name, bool loop);

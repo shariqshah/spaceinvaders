@@ -5,6 +5,10 @@
 #include <SFML\Graphics.hpp>
 #include <SFML\Audio.hpp>
 
+/*
+Represents Game Over state. Shown when the player dies. Shows the score and then
+takes the player back to the main menu
+*/
 class GameOver : public GameState
 {
 public:

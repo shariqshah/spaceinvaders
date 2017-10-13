@@ -63,6 +63,7 @@ void BarrierComponent::HandleCollision(Object * sender, const EventDataMap & eve
 			{
 				SpriteAnimationComponent* animation = (SpriteAnimationComponent*)entity->GetComponent(ComponentType::SpriteAnimation);
 				animation->MoveToNextFrame();
+			}
 		}
 	}
 }

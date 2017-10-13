@@ -20,6 +20,11 @@ enum class ComponentType
 	Len
 };
 
+/*
+Base Component type that  all components inherit from. Each component type
+that inherits from this class returns it's unique value which must be added 
+to the ComponentType enum above.
+*/
 class Component : public Object
 {
 public:

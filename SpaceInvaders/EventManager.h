@@ -15,7 +15,10 @@ class Entity;
 typedef std::map<std::string, Variant> EventDataMap;
 typedef std::function<void(Object* sender, const EventDataMap& data)> EventHandler;
 
-
+/*
+Represents an event subscription. Holds the event type that is subscribed to, the object
+that has subscribed and which method  of the object to call when that event occurs
+*/
 struct EventSubscription
 {
 	EventType    type;
@@ -31,6 +34,12 @@ struct EventSubscription
 	{}
 };
 
+/*
+All objects that want to subscibe to a particular event or send an event must us the 
+event manager. Event manager contains all the objects that have currently subscribed to 
+events and the parameter data that is sent when a particluar event occurs. Event parameter
+data is clear every frame.
+*/
 class EventManager
 {
 	std::vector<EventSubscription> subscriptions;

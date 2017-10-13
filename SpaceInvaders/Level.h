@@ -12,6 +12,8 @@ namespace sf
 
 class Entity;
 
+// Level(World) that gets populated by entities when a new game starts. These include
+// the Player's entity(Cannon), Drones, ground and Barriers.
 class Level : public GameState
 {
 public:

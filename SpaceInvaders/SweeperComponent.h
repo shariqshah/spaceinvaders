@@ -4,6 +4,10 @@
 
 #include <SFML\System.hpp>
 
+/*
+Provides sweeper logic. Sweeper shows up after a fixed interval at the top of the screen and if hit by
+a missile, provides extra score and lives.
+*/
 class SweeperComponent : public Component
 {
 public:

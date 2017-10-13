@@ -3,7 +3,9 @@
 #include "GameState.h"
 
 #include <SFML\Graphics.hpp>
-
+/*
+Shows the top ten high scores with the names of the players that scored them.
+*/
 class HighScores : public GameState
 {
 public:

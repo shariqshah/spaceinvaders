@@ -5,6 +5,10 @@
 #include <SFML\Graphics.hpp>
 #include <SFML\Audio.hpp>
 
+/*
+Shows the available options that can be tweaked. Sound and music can be toggled on or off.
+The keys used to move the player left, right and shoot can be remapped. 
+*/
 class Options : public GameState
 {
 public:

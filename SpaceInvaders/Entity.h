@@ -8,6 +8,13 @@
 class Component;
 enum class ComponentType;
 
+/*
+Entity represents an object that has a visual representation in the level and can be moved, scaled and rotated.
+Every entity can have different components which differenciate entities and provide unique behaviours.
+For example, the player, drones, barriers, bombs etc are all entities but they are different because of the 
+components the have. Each entity must have a unique name and only one instance of a particular component
+attached at a time.
+*/
 class Entity : public Object
 {
 public:
@@ -24,21 +31,6 @@ public:
 	bool RemoveComponent(ComponentType type);
 	std::vector<Component*>& GetComponents() { return components; };
 	Component* GetComponent(ComponentType type);
-
-
-	/*template<class T>
-	T* GetComponent() 
-	{
-		T temp;
-		for(Component* component : components)
-		{
-			if(component->GetType() == temp.GetType())
-			{
-				return static_cast<T*>(component);
-			}
-		}
-		return NULL;
-	}*/
 
 	//Convenience methods for entity transformation
 	void SetPosition(float x, float y) { sprite.setPosition(x, y); };

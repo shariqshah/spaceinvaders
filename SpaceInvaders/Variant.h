@@ -2,8 +2,6 @@
 
 #include <string>
 
-// A data type that can hold values of multiple types
-
 enum class VariantType
 {
 	None = 0,
@@ -30,6 +28,11 @@ union VariantValue
 	~VariantValue() {}
 };
 
+/* 
+A data type that can hold values of multiple types. Used when sending event paramaters to methods where the 
+type of the paramters is arbitrary and providing method signatures for all possible combinations is cumbersome and
+restricting. Instead we use a hash map that contains Variant values mapped to string keys to make things simpler
+*/
 class Variant
 {
 	VariantValue data;

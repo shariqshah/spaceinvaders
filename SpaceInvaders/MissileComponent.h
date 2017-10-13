@@ -2,6 +2,11 @@
 
 #include "Component.h"
 
+/*
+Provides missile logic. Missiles are spawned by the player(Cannon).
+Missiles only collide with drones and bombs. When a bomb is hit, it is destroyed.
+When a drone is hit, it gets damaged depending on the DroneType
+*/
 class MissileComponent : public Component
 {
 public:
