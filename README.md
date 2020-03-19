@@ -1,9 +1,10 @@
 
 # Space Invaders
 
+### [Download](https://github.com/shariqshah/spaceinvaders/releases/download/v1.0/SpaceInvaders.zip)
+
 <img float="left" src="screenshots/space_invaders_menu.png" alt="Space Invaders!" width="400" height="300">
 <img float="right" src="screenshots/space_invaders.png" alt="Space Invaders!" width="400" height="300">
-
 
 ## About
 
